@@ -1,0 +1,16 @@
+@import "tailwindcss";
+
+
+/* Ahora puedes usar tus estilos personalizados */
+@layer base {
+  :root {
+    --font-jetbrains: 'JetBrains Mono', monospace;
+  }
+
+  html,
+  body {
+    @apply bg-neutral-50 dark:bg-neutral-950 text-neutral-900 dark:text-neutral-100;
+    font-family: var(--font-jetbrains);
+    scroll-behavior: smooth;
+  }
+}

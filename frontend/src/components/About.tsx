@@ -14,7 +14,7 @@ export default function About() {
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
         viewport={{ once: true }}
-        className="text-3xl md:text-4xl font-semibold text-neutral-900 dark:text-neutral-100 mb-6"
+        className="text-3xl md:text-4xl font-semibold mb-6"
       >
         Sobre mí
       </motion.h2>
@@ -25,7 +25,7 @@ export default function About() {
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2, duration: 0.8 }}
         viewport={{ once: true }}
-        className="max-w-xl text-base md:text-lg text-neutral-600 dark:text-neutral-300 leading-relaxed"
+        className="max-w-xl text-base md:text-lg leading-relaxed"
       >
         Soy un desarrollador <strong>Full Stack</strong> apasionado por crear
         aplicaciones web limpias, rápidas y con un gran enfoque en la
@@ -34,7 +34,7 @@ export default function About() {
         <br />
         <br />
         Actualmente trabajo con tecnologías modernas como{" "}
-        <span className="text-violet-500 font-medium">
+        <span className="text-blue-600 font-medium">
           TypeScript, Next.js, React, y Node.js
         </span>
         , explorando nuevas formas de optimizar procesos y construir interfaces

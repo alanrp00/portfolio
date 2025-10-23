@@ -3,9 +3,15 @@
 
 /* Ahora puedes usar tus estilos personalizados */
 @layer base {
-  :root {
-    --font-jetbrains: 'JetBrains Mono', monospace;
+  html {
+    font-family: 'Inter', sans-serif;
+    scroll-behavior: smooth;
   }
+
+  p.subtitle {
+    font-family: 'Consolas', monospace;
+  }
+
 
   /* 🔧 Forzar limpieza de fondos sólidos */
   html,
@@ -17,23 +23,5 @@
     background-color: transparent !important;
   }
 
-  html {
-    @apply transition-colors duration-700;
-    background: pink;
-  }
 
-  html.dark {
-    background: green;
-  }
 }
-
-/* .hero-glow {
-  position: absolute;
-  width: 600px;
-  height: 400px;
-  background: radial-gradient(circle at center,
-      rgba(54, 51, 234, 0.25),
-      transparent 70%);
-  filter: blur(80px);
-  z-index: 0;
-} */

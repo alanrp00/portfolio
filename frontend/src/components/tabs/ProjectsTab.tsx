@@ -1,100 +1,107 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
 import ProjectModal from "../modals/ProjectModal";
 
-export default function ProjectsTab() {
-  const [selectedProject, setSelectedProject] = useState<any>(null);
+type Project = {
+  title: string;
+  description: string;
+  tech: string[];
+  link?: string;
+  images?: string[];
+  details?: {
+    overview?: string;
+    features?: string[];
+  };
+};
 
-  const projects = [
-    {
-      title: "Palabro",
-      description: "Juego tipo Wordle con partidas infinitas desarrollado en Kotlin.",
-      tech: ["Kotlin", "Jetpack Compose", "MVVM"],
-      link: "https://github.com/alanrp00/Palabro/releases/tag/v1.0.0",
-      images: [
-        "/projects/palabro-1.png",
-        "/projects/palabro-2.png",
+const projects: Project[] = [
+  {
+    title: "Palabro",
+    description: "Juego basado en Wordle, pero partidas infinitas.",
+    tech: ["Kotlin", "Jetpack Compose", "Navigation Compose", "DataStore", "MVVM"],
+    link: "https://github.com/alanrp00/Palabro",
+    images: [
+      "/projects/palabro-1.png",
+      "/projects/palabro-2.png",
+    ],
+    details: {
+      overview:
+        "Palabro es un juego inspirado en Wordle, desarrollado en Kotlin utilizando Jetpack Compose. La aplicación cuenta con partidas infinitas y estadísticas locales gracias a Jetpack DataStore.",
+      features: [
+        "Partidas infinitas y modo diario.",
+        "Diseño moderno con Jetpack Compose.",
+        "Persistencia de datos con Jetpack DataStore.",
+        "Arquitectura MVVM con una sola Activity.",
+        "Navegación fluida con Navigation Compose.",
       ],
-      details: {
-        overview:
-          "Palabro es un juego inspirado en Wordle, creado en Kotlin usando Jetpack Compose. Permite partidas infinitas y guarda estadísticas localmente.",
-        features: [
-          "Diseño moderno con Jetpack Compose",
-          "Navegación fluida con Navigation Compose",
-          "Almacenamiento con Jetpack DataStore",
-          "Arquitectura MVVM limpia y mantenible",
-        ],
-      },
     },
-    {
-      title: "Portfolio Personal",
-      description:
-        "Sitio web profesional con modo claro/oscuro y animaciones modernas.",
-      tech: ["Next.js", "Tailwind", "Framer Motion"],
-      link: "https://github.com/alanrp00/portfolio",
-      images: [
-        // Imágenes del proyecto Portfolio Personal
-      ],
-      details: {
-        overview:
-          "Portfolio minimalista y totalmente responsive, con animaciones suaves y soporte completo de tema claro/oscuro.",
-        features: [
-          "Diseño responsivo adaptable",
-          "Modo oscuro/claro instantáneo",
-          "Animaciones con Framer Motion",
-          "Organización modular con componentes reutilizables",
-        ],
-      },
-    },
-  ];
+  },
+  // Puedes añadir más proyectos aquí...
+];
+
+export default function ProjectsTab() {
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
   return (
-    <>
-      <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-        {projects.map((p, i) => (
+    <div className="relative w-full px-6 md:px-12 lg:px-20 py-10">
+      <motion.div
+        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
+        initial="hidden"
+        animate="visible"
+        variants={{
+          hidden: {},
+          visible: { transition: { staggerChildren: 0.15 } },
+        }}
+      >
+        {projects.map((project, index) => (
           <motion.div
-            key={i}
-            whileHover={{
-              scale: 1.03,
-              y: -3,
-              boxShadow: "0 8px 24px rgba(71,132,245,0.15)",
+            key={index}
+            className="bg-[var(--color-card-bg)] border border-[var(--color-border)] rounded-2xl p-6 cursor-pointer transition-transform duration-200 hover:scale-[1.03] hover:border-[var(--color-accent)]/60"
+            onClick={() => setSelectedProject(project)}
+            variants={{
+              hidden: { opacity: 0, y: 20 },
+              visible: { opacity: 1, y: 0 },
             }}
-            transition={{
-              type: "spring",
-              stiffness: 400,
-              damping: 18,
-            }}
-            className="group cursor-pointer rounded-2xl border border-[var(--color-border)] bg-[var(--color-card-bg)] hover:border-[var(--color-accent)]/70 p-6 transition-all duration-300"
-            onClick={() => setSelectedProject(p)}
+            transition={{ duration: 0.4, ease: "easeOut" }}
           >
-            <h3 className="text-lg font-semibold text-[var(--color-text-primary)] mb-2 group-hover:text-[var(--color-accent)] transition-colors">
-              {p.title}
+            <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mb-2">
+              {project.title}
             </h3>
-            <p className="text-sm text-[var(--color-text-secondary)] mb-4">
-              {p.description}
+            <p className="text-[var(--color-text-secondary)] mb-4">
+              {project.description}
             </p>
-            <div className="flex flex-wrap gap-2 text-xs text-[var(--color-accent)]">
-              {p.tech.map((t, idx) => (
+
+            <div className="flex flex-wrap gap-2">
+              {project.tech.slice(0, 3).map((tech, i) => (
                 <span
-                  key={idx}
-                  className="px-2 py-1 rounded-md bg-[var(--color-accent)]/10 border border-[var(--color-accent)]/20"
+                  key={i}
+                  className="px-3 py-1 text-xs rounded-md border border-[var(--color-accent)]/30 bg-[var(--color-accent)]/10 text-[var(--color-accent)]"
                 >
-                  {t}
+                  {tech}
                 </span>
               ))}
+              {project.tech.length > 3 && (
+                <span className="px-3 py-1 text-xs rounded-md border border-[var(--color-accent)]/20 bg-[var(--color-accent)]/5 text-[var(--color-accent)]/70">
+                  +{project.tech.length - 3}
+                </span>
+              )}
             </div>
           </motion.div>
         ))}
-      </div>
+      </motion.div>
 
-      {selectedProject && (
-        <ProjectModal
-          project={selectedProject}
-          onClose={() => setSelectedProject(null)}
-        />
-      )}
-    </>
+      {/* Modal de proyecto con animación de salida */}
+      <AnimatePresence mode="wait">
+        {selectedProject && (
+          <ProjectModal
+            key={selectedProject.title}
+            project={selectedProject}
+            onClose={() => setSelectedProject(null)}
+          />
+        )}
+      </AnimatePresence>
+    </div>
   );
 }

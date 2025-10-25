@@ -3,6 +3,7 @@
 import ProjectsTab from "@/components/tabs/ProjectsTab";
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
+import ExperienceTab from "./tabs/ExperienceTab";
 
 
 const tabs = [
@@ -55,17 +56,7 @@ export default function TabsSection() {
           >
             {activeTab === "proyectos" && <ProjectsTab />}
 
-            {activeTab === "experiencia" && (
-              <div className="text-[var(--color-text-secondary)] max-w-xl">
-                <h3 className="text-2xl font-semibold mb-4 text-[var(--color-text-primary)]">
-                  Experiencia Profesional
-                </h3>
-                <p>
-                  Detalla tus puestos, responsabilidades y tecnologías
-                  utilizadas. Se mostrará en tarjetas tipo timeline.
-                </p>
-              </div>
-            )}
+            {activeTab === "experiencia" && <ExperienceTab />}
 
             {activeTab === "habilidades" && (
               <div className="text-[var(--color-text-secondary)] max-w-xl">

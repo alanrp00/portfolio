@@ -7,7 +7,7 @@ import Image from "next/image";
 
 export default function Hero() {
   const { text, isTyping } = useTypingEffect(
-    ["Desarrollador Full Stack Junior", "Apasionado por la tecnología", "Amante del diseño limpio"],
+    ["Desarrollador Full Stack Junior", "Apasionado por la tecnología", "Siempre aprendiendo"],
     90,
     1500
   );

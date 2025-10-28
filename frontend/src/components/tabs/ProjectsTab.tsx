@@ -1,84 +1,65 @@
 "use client";
 
-import SectionWrapper from "@/components/SectionWrapper";
-import { Project, projects } from "@/data/projects";
+import ProjectModal from "@/components/modals/ProjectModal";
+import { projects } from "@/data/projects";
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
-import ProjectModal from "../modals/ProjectModal";
 
 export default function ProjectsTab() {
-  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
-  const [hoverIndex, setHoverIndex] = useState<number | null>(null);
+  const [selectedProject, setSelectedProject] = useState<(typeof projects)[0] | null>(null);
 
   return (
-    <SectionWrapper>
+    <section className="w-full flex flex-col items-center justify-center py-10">
       <motion.div
-        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
-        initial="hidden"
-        animate="visible"
-        variants={{
-          hidden: {},
-          visible: { transition: { staggerChildren: 0.15 } },
-        }}
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-fr w-full max-w-6xl"
       >
-        {projects.map((project, index) => (
+        {projects.map((project, i) => (
           <motion.div
-            key={index}
-            className="cursor-pointer"
-            onClick={() => setSelectedProject(project)}
-            onMouseEnter={() => setHoverIndex(index)}
-            onMouseLeave={() => setHoverIndex(null)}
-            variants={{
-              hidden: { opacity: 0, y: 20 },
-              visible: { opacity: 1, y: 0 },
+            key={i}
+            whileHover={{
+              scale: 1.02,
+              boxShadow: "0 0 18px var(--color-accent)",
+              borderColor: "var(--color-accent)",
             }}
-            transition={{ duration: 0.4, ease: "easeOut" }}
+            transition={{ type: "spring", stiffness: 200, damping: 15 }}
+            className="relative bg-[var(--color-card-bg)] border border-[var(--color-border)] rounded-2xl p-6 flex flex-col justify-between min-h-[250px] h-full hover:border-[var(--color-accent)] transition-all cursor-pointer"
+            onClick={() => setSelectedProject(project)}
           >
-            {/* Tarjeta animada con borde y glow */}
-            <motion.div
-              animate={{
-                borderColor:
-                  hoverIndex === index
-                    ? "var(--color-accent)"
-                    : "var(--color-border)",
-                boxShadow:
-                  hoverIndex === index
-                    ? "0 0 20px var(--color-accent)"
-                    : "0 0 6px rgba(0,0,0,0.15)",
-                scale: hoverIndex === index ? 1.03 : 1,
-              }}
-              transition={{ duration: 0.4, ease: "easeInOut" }}
-              className="bg-[var(--color-card-bg)] border rounded-2xl p-6 transition-all duration-300"
-            >
-              <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mb-2">
+            {/* Título y descripción */}
+            <div>
+              <h3 className="text-lg font-semibold text-[var(--color-text-primary)] mb-2">
                 {project.title}
               </h3>
-              <p className="text-[var(--color-text-secondary)] mb-4">
+              <p className="text-[var(--color-text-secondary)] mb-4 leading-relaxed">
                 {project.description}
               </p>
+            </div>
 
-              <div className="flex flex-wrap gap-2">
-                {project.tech.slice(0, 3).map((tech, i) => (
-                  <span
-                    key={i}
-                    className="px-3 py-1 text-xs rounded-md border border-[var(--color-accent)]/30 bg-[var(--color-accent)]/10 text-[var(--color-accent)]"
-                  >
-                    {tech}
-                  </span>
-                ))}
-                {project.tech.length > 3 && (
-                  <span className="px-3 py-1 text-xs rounded-md border border-[var(--color-accent)]/20 bg-[var(--color-accent)]/5 text-[var(--color-accent)]/70">
-                    +{project.tech.length - 3}
-                  </span>
-                )}
-              </div>
-            </motion.div>
+            {/* Tecnologías */}
+            <div className="flex flex-wrap gap-2 mt-auto px-1 md:px-2">
+              {project.tech.slice(0, 3).map((t, j) => (
+                <span
+                  key={j}
+                  className="px-3 py-1 text-sm border border-[var(--color-accent)]/40 rounded-md text-[var(--color-accent)] bg-[var(--color-accent)]/10"
+                >
+                  {t}
+                </span>
+              ))}
+              {project.tech.length > 3 && (
+                <span className="px-2 py-1 text-sm text-[var(--color-accent)] border border-[var(--color-accent)]/30 rounded-md">
+                  +{project.tech.length - 3}
+                </span>
+              )}
+            </div>
           </motion.div>
         ))}
       </motion.div>
 
       {/* Modal del proyecto */}
-      <AnimatePresence mode="wait">
+      <AnimatePresence>
         {selectedProject && (
           <ProjectModal
             key={selectedProject.title}
@@ -87,6 +68,6 @@ export default function ProjectsTab() {
           />
         )}
       </AnimatePresence>
-    </SectionWrapper>
+    </section>
   );
 }

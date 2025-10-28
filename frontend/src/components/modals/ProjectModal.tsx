@@ -1,17 +1,25 @@
 "use client";
 
+import { Project } from "@/data/projects";
+import { usePortfolioData } from "@/hooks/usePortfolioData";
 import { ChevronLeftIcon, ChevronRightIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
 
 type ProjectModalProps = {
-  project: any;
+  project: Project;
   onClose: () => void;
 };
 
 export default function ProjectModal({ project, onClose }: ProjectModalProps) {
   const [isMounted, setIsMounted] = useState(false);
   const [index, setIndex] = useState(0);
+  const { getSkillsByProject } = usePortfolioData();
+
+  // 🔗 Determinar el conjunto de skills del proyecto (portfolio o palabro)
+  const projectKey =
+    project.title.toLowerCase().includes("palabro") ? "palabro" : "portfolio";
+  const relatedSkills = getSkillsByProject(projectKey);
 
   useEffect(() => {
     const timer = requestAnimationFrame(() => setIsMounted(true));
@@ -22,13 +30,13 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
 
   const handleNext = () => {
     if (project.images?.length) {
-      setIndex((prev) => (prev + 1) % project.images.length);
+      setIndex((prev) => (prev + 1) % (project.images?.length ?? 1));
     }
   };
 
   const handlePrev = () => {
     if (project.images?.length) {
-      setIndex((prev) => (prev - 1 + project.images.length) % project.images.length);
+      setIndex((prev) => (prev - 1 + (project.images?.length ?? 1)) % (project.images?.length ?? 1));
     }
   };
 
@@ -63,7 +71,7 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
           className="relative w-full max-w-5xl max-h-[90vh] overflow-y-auto bg-[var(--color-card-bg)] rounded-2xl shadow-xl border border-[var(--color-border)]"
           style={{ overflowAnchor: "none", scrollbarWidth: "none" }}
         >
-          {/* Botón cerrar con animación hover */}
+          {/* Botón cerrar */}
           <motion.button
             onClick={onClose}
             className="absolute top-4 right-4 text-[var(--color-text-secondary)]"
@@ -78,7 +86,7 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
             <h2 className="text-2xl font-bold text-[var(--color-text-primary)]">{project.title}</h2>
           </div>
 
-          {/* Carrusel de imágenes */}
+          {/* Carrusel */}
           <div className="relative w-full mt-6 flex justify-center items-center px-6">
             <button
               onClick={handlePrev}
@@ -119,8 +127,8 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
                 <div
                   key={i}
                   className={`w-2.5 h-2.5 rounded-full transition-all ${i === index
-                      ? "bg-[var(--color-accent)]"
-                      : "bg-[var(--color-text-secondary)]/40"
+                    ? "bg-[var(--color-accent)]"
+                    : "bg-[var(--color-text-secondary)]/40"
                     }`}
                 />
               ))}
@@ -186,7 +194,7 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
                   <h3 className="text-lg font-semibold text-[var(--color-text-primary)] mb-3">
                     Technologies
                   </h3>
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex flex-wrap gap-2 px-1 md:px-2">
                     {project.tech?.map((t: string, i: number) => (
                       <motion.span
                         key={i}
@@ -200,7 +208,32 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
                       </motion.span>
                     ))}
                   </div>
+
                 </div>
+
+                {/* 💡 Skills relacionadas (usePortfolioData) */}
+                {relatedSkills.length > 0 && (
+                  <div>
+                    <h3 className="text-lg font-semibold text-[var(--color-text-primary)] mb-3">
+                      Related Skills
+                    </h3>
+                    <div className="flex flex-wrap gap-2 px-1 md:px-2">
+                      {relatedSkills.map((skill, i) => (
+                        <motion.span
+                          key={i}
+                          whileHover={{
+                            scale: 1.1,
+                            boxShadow: "0 0 10px var(--color-accent)",
+                          }}
+                          transition={{ type: "spring", stiffness: 300, damping: 15 }}
+                          className="px-3 py-1 text-sm rounded-md border border-[var(--color-accent)]/40 bg-[var(--color-accent)]/10 text-[var(--color-accent)]"
+                        >
+                          {skill.name}
+                        </motion.span>
+                      ))}
+                    </div>
+                  </div>
+                )}
 
                 {/* Enlace a GitHub */}
                 {project.link && (

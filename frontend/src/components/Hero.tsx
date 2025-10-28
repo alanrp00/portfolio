@@ -17,21 +17,71 @@ export default function Hero() {
       id="inicio"
       className="relative flex flex-col items-center justify-center min-h-screen text-center container"
     >
-      {/* Avatar */}
+      {/* 🧑‍💻 Avatar con glow fluido continuo */}
       <motion.div
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="card mb-8 w-40 h-40 flex items-center justify-center overflow-hidden"
+        whileHover={{
+          scale: 1.05,
+          boxShadow: "0 0 30px var(--color-accent)",
+          borderColor: "var(--color-accent)",
+        }}
+        className="relative mb-8 w-64 h-64 flex items-center justify-center rounded-2xl border border-[var(--color-border)] bg-[var(--color-card-bg)] shadow-lg overflow-hidden transition-all duration-500"
       >
-        <Image
-          src="/avatar.png"
-          alt="Alán avatar"
-          width={160}
-          height={160}
-          className="rounded-xl object-cover"
+        {/* Glow ambiental detrás del avatar */}
+        <motion.div
+          className="absolute inset-0 rounded-2xl pointer-events-none"
+          style={{
+            background:
+              "radial-gradient(circle at center, var(--color-accent) 0%, transparent 70%)",
+            filter: "blur(30px)",
+            opacity: 0.4,
+          }}
+          animate={{
+            opacity: [0.3, 0.7, 0.3],
+            scale: [1, 1.05, 1],
+          }}
+          transition={{
+            duration: 4,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        />
+
+        {/* Imagen del avatar sin recorte */}
+        <div className="relative z-10 w-full h-full flex items-center justify-center rounded-2xl overflow-hidden">
+          <Image
+            src="/avatar.png"
+            alt="Alán avatar"
+            fill
+            className="object-contain rounded-2xl"
+            sizes="(max-width: 768px) 100vw, 256px"
+            priority
+          />
+        </div>
+
+        {/* Borde luminoso dinámico */}
+        <motion.div
+          className="absolute inset-0 rounded-2xl border-2 border-[var(--color-accent)] pointer-events-none"
+          animate={{
+            opacity: [0.3, 0.9, 0.3],
+            boxShadow: [
+              "0 0 0px var(--color-accent)",
+              "0 0 25px var(--color-accent)",
+              "0 0 0px var(--color-accent)",
+            ],
+          }}
+          transition={{
+            duration: 3,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
         />
       </motion.div>
+
+
+
 
       {/* Nombre principal */}
       <motion.h1
@@ -74,7 +124,7 @@ export default function Hero() {
         </a>
       </motion.div>
 
-      {/* Flecha hacia abajo fija en parte baja */}
+      {/* Flecha hacia abajo */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}

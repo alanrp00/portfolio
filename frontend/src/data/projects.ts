@@ -1,5 +1,3 @@
-// /data/projects.ts
-
 export type Project = {
   title: string;
   description: string;
@@ -15,51 +13,50 @@ export type Project = {
 export const projects: Project[] = [
   {
     title: "Palabro",
-    description: "Juego basado en Wordle, pero con partidas infinitas y estadísticas locales.",
+    description: "Juego inspirado en Wordle, desarrollado en Kotlin con Jetpack Compose.",
     tech: ["Kotlin", "Jetpack Compose", "Navigation Compose", "DataStore", "MVVM"],
     link: "https://github.com/alanrp00/Palabro",
     images: ["/projects/palabro-1.png", "/projects/palabro-2.png"],
     details: {
       overview:
-        "Palabro es un juego inspirado en Wordle, desarrollado en Kotlin con Jetpack Compose. Cuenta con partidas infinitas y persistencia de datos con Jetpack DataStore.",
+        "Juego Android con arquitectura MVVM y almacenamiento persistente mediante DataStore. Implementa una experiencia fluida con Jetpack Compose y navegación moderna.",
       features: [
-        "Partidas infinitas y modo diario.",
-        "Diseño moderno con Jetpack Compose.",
-        "Persistencia de datos con Jetpack DataStore.",
-        "Arquitectura MVVM con una sola Activity.",
-        "Navegación fluida con Navigation Compose.",
+        "Diseño UI 100 % Compose.",
+        "Gestión de estado con ViewModel.",
+        "Persistencia con DataStore.",
+        "Navegación dinámica con Navigation Compose.",
       ],
     },
   },
   {
     title: "Portfolio",
-    description: "Mi sitio web personal desarrollado con Next.js, TypeScript y animaciones con Framer Motion.",
+    description: "Sitio web personal creado con Next.js, TypeScript y Framer Motion.",
     tech: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Framer Motion"],
     link: "https://alanrp.dev",
-    images: ["/projects/portfolio-1.png", "/projects/portfolio-2.png"],
+    images: ["/projects/portfolio-1.png"],
     details: {
       overview:
-        "Portfolio personal minimalista con animaciones suaves, layout responsive y estructura modular. Implementa un sistema de tabs interactivo para mostrar experiencia, proyectos y skills.",
+        "Portfolio moderno, con animaciones suaves y tabs interactivos. Construido con arquitectura modular y estilo coherente basado en variables CSS.",
       features: [
-        "Diseño responsive y accesible.",
         "Animaciones con Framer Motion.",
-        "Gestión modular de secciones con React y TypeScript.",
-        "Estilo visual coherente con variables CSS y tema oscuro.",
+        "Diseño responsive.",
+        "Sistema de tabs dinámicos.",
+        "Tema oscuro con acento personalizado.",
       ],
     },
   },
   {
     title: "API Server",
-    description: "Backend modular con Node.js y MongoDB para servicios personales y pruebas de integración.",
+    description: "Backend modular en Node.js y Express con MongoDB y Docker.",
     tech: ["Node.js", "Express", "MongoDB", "Docker"],
     link: "https://github.com/alanrp00/api-server",
     details: {
       overview:
-        "API REST creada con Node.js y Express, conectada a MongoDB, lista para desplegar en contenedores Docker.",
+        "API REST modular para proyectos personales y pruebas de integración, desplegable en Docker.",
       features: [
-        "Estructura modular con controladores y rutas.",
-        "Configuración Docker para entorno de desarrollo y producción.",
-        "Endpoints CRUD seguros con validación.",
+        "Estructura modular (controllers, routes).",
+        "Endpoints CRUD seguros.",
+        "Configuración Docker Compose.",
       ],
     },
   },

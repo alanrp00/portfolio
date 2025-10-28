@@ -4,6 +4,7 @@ import ProjectsTab from "@/components/tabs/ProjectsTab";
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
 import ExperienceTab from "./tabs/ExperienceTab";
+import SkillsTab from "./tabs/SkillsTab";
 
 
 const tabs = [
@@ -58,17 +59,7 @@ export default function TabsSection() {
 
             {activeTab === "experiencia" && <ExperienceTab />}
 
-            {activeTab === "habilidades" && (
-              <div className="text-[var(--color-text-secondary)] max-w-xl">
-                <h3 className="text-2xl font-semibold mb-4 text-[var(--color-text-primary)]">
-                  Habilidades Técnicas
-                </h3>
-                <p>
-                  Mostrarás tus lenguajes, frameworks y herramientas con nivel
-                  visual (Básico / Intermedio / Avanzado).
-                </p>
-              </div>
-            )}
+            {activeTab === "habilidades" && <SkillsTab />}
 
             {activeTab === "educacion" && (
               <div className="text-[var(--color-text-secondary)] max-w-xl">

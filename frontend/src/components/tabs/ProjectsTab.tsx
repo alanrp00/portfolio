@@ -1,49 +1,17 @@
 "use client";
 
+import SectionWrapper from "@/components/SectionWrapper";
+import { Project, projects } from "@/data/projects";
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
 import ProjectModal from "../modals/ProjectModal";
-
-type Project = {
-  title: string;
-  description: string;
-  tech: string[];
-  link?: string;
-  images?: string[];
-  details?: {
-    overview?: string;
-    features?: string[];
-  };
-};
-
-const projects: Project[] = [
-  {
-    title: "Palabro",
-    description: "Juego basado en Wordle, pero partidas infinitas.",
-    tech: ["Kotlin", "Jetpack Compose", "Navigation Compose", "DataStore", "MVVM"],
-    link: "https://github.com/alanrp00/Palabro",
-    images: ["/projects/palabro-1.png", "/projects/palabro-2.png"],
-    details: {
-      overview:
-        "Palabro es un juego inspirado en Wordle, desarrollado en Kotlin utilizando Jetpack Compose. La aplicación cuenta con partidas infinitas y estadísticas locales gracias a Jetpack DataStore.",
-      features: [
-        "Partidas infinitas y modo diario.",
-        "Diseño moderno con Jetpack Compose.",
-        "Persistencia de datos con Jetpack DataStore.",
-        "Arquitectura MVVM con una sola Activity.",
-        "Navegación fluida con Navigation Compose.",
-      ],
-    },
-  },
-  // Puedes añadir más proyectos aquí...
-];
 
 export default function ProjectsTab() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [hoverIndex, setHoverIndex] = useState<number | null>(null);
 
   return (
-    <div className="relative w-full px-6 md:px-12 lg:px-20 py-10">
+    <SectionWrapper>
       <motion.div
         className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
         initial="hidden"
@@ -109,7 +77,7 @@ export default function ProjectsTab() {
         ))}
       </motion.div>
 
-      {/* Modal de proyecto con animación */}
+      {/* Modal del proyecto */}
       <AnimatePresence mode="wait">
         {selectedProject && (
           <ProjectModal
@@ -119,6 +87,6 @@ export default function ProjectsTab() {
           />
         )}
       </AnimatePresence>
-    </div>
+    </SectionWrapper>
   );
 }

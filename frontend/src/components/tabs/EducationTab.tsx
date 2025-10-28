@@ -1,13 +1,11 @@
 "use client";
 
 import { certificates, formalEducation } from "@/data/education";
+import { getIcon } from "@/utils/iconMap";
 import { motion } from "framer-motion";
 import {
   FaCertificate,
-  FaDocker,
-  FaGitAlt,
-  FaGraduationCap,
-  FaReact,
+  FaGraduationCap
 } from "react-icons/fa";
 
 export default function EducationTab() {
@@ -80,15 +78,8 @@ export default function EducationTab() {
             className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
           >
             {certificates.map((cert, i) => {
-              // 🔧 Mapa explícito de iconos válidos
-              const iconMap: Record<string, React.ElementType> = {
-                FaReact,
-                FaDocker,
-                FaGitAlt,
-              };
 
-              const Icon = iconMap[cert.icon] || FaCertificate;
-
+              const Icon = getIcon(cert.icon);
 
               return (
                 <motion.div

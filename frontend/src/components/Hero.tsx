@@ -24,28 +24,29 @@ export default function Hero() {
       id="inicio"
       className="relative flex flex-col items-center justify-center min-h-screen text-center container"
     >
-      {/* 🧑‍💻 Avatar con glow continuo sincronizado */}
+      {/* 🧑‍💻 Avatar con glow y sombra flotante 3D */}
       <motion.div
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
         whileHover={{
           scale: 1.05,
-          boxShadow: `0 0 30px ${accent}`,
+          y: -5,
+          boxShadow: `0 20px 45px ${accent}33, 0 0 30px ${accent}`,
           borderColor: accent,
         }}
-        className="relative mb-8 w-64 h-64 flex items-center justify-center rounded-2xl border border-[var(--color-border)] bg-[var(--color-card-bg)] shadow-lg overflow-hidden transition-all duration-500"
+        className="relative mb-8 w-64 h-64 flex items-center justify-center rounded-2xl border border-[var(--color-border)] bg-[var(--color-card-bg)] shadow-[0_12px_24px_rgba(0,0,0,0.25)] overflow-hidden transition-all duration-500"
       >
-        {/* Glow ambiental dinámico */}
+        {/* 🌌 Glow ambiental dinámico */}
         <motion.div
           className="absolute inset-0 rounded-2xl pointer-events-none"
           style={{
             background: `radial-gradient(circle at center, ${accent} 0%, transparent 70%)`,
-            filter: "blur(30px)",
+            filter: "blur(35px)",
           }}
           animate={{
             opacity: [0.3, 0.7, 0.3],
-            scale: [1, 1.05, 1],
+            scale: [1, 1.06, 1],
           }}
           transition={{
             duration: 4,
@@ -54,7 +55,7 @@ export default function Hero() {
           }}
         />
 
-        {/* Imagen sin recorte */}
+        {/* 🖼️ Imagen principal */}
         <div className="relative z-10 w-full h-full flex items-center justify-center rounded-2xl overflow-hidden">
           <Image
             src="/avatar.png"
@@ -66,7 +67,7 @@ export default function Hero() {
           />
         </div>
 
-        {/* Borde dinámico sincronizado con el color de acento */}
+        {/* 💡 Borde dinámico */}
         <motion.div
           className="absolute inset-0 rounded-2xl border-2 pointer-events-none"
           style={{ borderColor: accent }}

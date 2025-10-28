@@ -3,6 +3,7 @@
 import ProjectsTab from "@/components/tabs/ProjectsTab";
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
+import EducationTab from "./tabs/EducationTab";
 import ExperienceTab from "./tabs/ExperienceTab";
 import SkillsTab from "./tabs/SkillsTab";
 
@@ -61,17 +62,7 @@ export default function TabsSection() {
 
             {activeTab === "habilidades" && <SkillsTab />}
 
-            {activeTab === "educacion" && (
-              <div className="text-[var(--color-text-secondary)] max-w-xl">
-                <h3 className="text-2xl font-semibold mb-4 text-[var(--color-text-primary)]">
-                  Educación & Certificados
-                </h3>
-                <p>
-                  Sección dividida entre educación formal y certificados
-                  profesionales, con enlaces a sus credenciales.
-                </p>
-              </div>
-            )}
+            {activeTab === "educacion" && <EducationTab />}
           </motion.div>
         </AnimatePresence>
       </div>

@@ -1,51 +1,38 @@
 "use client";
 
+import { getIcon } from "@/utils/iconMap";
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
-import {
-  SiAndroidstudio,
-  SiDocker,
-  SiFirebase,
-  SiGit,
-  SiJetpackcompose,
-  SiKotlin,
-  SiLinux,
-  SiMongodb,
-  SiNextdotjs,
-  SiNodedotjs,
-  SiReact,
-  SiTailwindcss,
-  SiTypescript,
-} from "react-icons/si";
 
 type Skill = {
   name: string;
-  icon: React.ElementType;
+  icon: string;
   category: "Frontend" | "Backend" | "DevOps & Tools";
   projects: ("portfolio" | "palabro")[];
+  color: string;
 };
 
 const skills: Skill[] = [
   // --- FRONTEND ---
-  { name: "React", icon: SiReact, category: "Frontend", projects: ["portfolio"] },
-  { name: "Next.js", icon: SiNextdotjs, category: "Frontend", projects: ["portfolio"] },
-  { name: "TypeScript", icon: SiTypescript, category: "Frontend", projects: ["portfolio"] },
-  { name: "Tailwind CSS", icon: SiTailwindcss, category: "Frontend", projects: ["portfolio"] },
+  { name: "React", icon: "FaReact", category: "Frontend", projects: ["portfolio"], color: "#61DAFB" },
+  { name: "Next.js", icon: "FaJsSquare", category: "Frontend", projects: ["portfolio"], color: "#000000" },
+  { name: "TypeScript", icon: "FaJsSquare", category: "Frontend", projects: ["portfolio"], color: "#3178C6" },
+  { name: "Tailwind CSS", icon: "FaCss3Alt", category: "Frontend", projects: ["portfolio"], color: "#06B6D4" },
 
   // --- BACKEND ---
-  { name: "Node.js", icon: SiNodedotjs, category: "Backend", projects: ["portfolio"] },
-  { name: "MongoDB", icon: SiMongodb, category: "Backend", projects: ["portfolio"] },
+  { name: "Node.js", icon: "FaNodeJs", category: "Backend", projects: ["portfolio"], color: "#68A063" },
+  { name: "MongoDB", icon: "FaDatabase", category: "Backend", projects: ["portfolio"], color: "#47A248" },
 
   // --- DEVOPS ---
-  { name: "Docker", icon: SiDocker, category: "DevOps & Tools", projects: ["portfolio"] },
-  { name: "Git", icon: SiGit, category: "DevOps & Tools", projects: ["portfolio", "palabro"] },
-  { name: "Linux", icon: SiLinux, category: "DevOps & Tools", projects: ["portfolio"] },
+  { name: "Docker", icon: "FaDocker", category: "DevOps & Tools", projects: ["portfolio"], color: "#2496ED" },
+  { name: "Git", icon: "FaGitAlt", category: "DevOps & Tools", projects: ["portfolio", "palabro"], color: "#F05033" },
+  { name: "Linux", icon: "FaLinux", category: "DevOps & Tools", projects: ["portfolio"], color: "#FCC624" },
 
   // --- PALABRO (Android) ---
-  { name: "Kotlin", icon: SiKotlin, category: "Backend", projects: ["palabro"] },
-  { name: "Jetpack Compose", icon: SiJetpackcompose, category: "Frontend", projects: ["palabro"] },
-  { name: "Navigation Compose", icon: SiAndroidstudio, category: "Frontend", projects: ["palabro"] },
-  { name: "Jetpack DataStore", icon: SiFirebase, category: "Backend", projects: ["palabro"] },
+  { name: "Kotlin", icon: "FaJava", category: "Backend", projects: ["palabro"], color: "#7F52FF" },
+  { name: "Jetpack Compose", icon: "FaReact", category: "Frontend", projects: ["palabro"], color: "#4285F4" },
+  { name: "Navigation Compose", icon: "FaGoogle", category: "Frontend", projects: ["palabro"], color: "#3DDC84" },
+  { name: "Jetpack DataStore", icon: "FaDatabase", category: "Backend", projects: ["palabro"], color: "#FFCA28" },
 ];
 
 const filters = [
@@ -70,7 +57,6 @@ export default function SkillsTab() {
     exit: { opacity: 0, y: 20, scale: 0.9 },
   };
 
-  // 🧠 Texto dinámico del filtro
   const filterDescriptions: Record<typeof activeFilter, string> = {
     all: "Mostrando todas las tecnologías utilizadas en mis proyectos.",
     portfolio: "Mostrando tecnologías empleadas en este portfolio web.",
@@ -87,7 +73,6 @@ export default function SkillsTab() {
         className="sticky top-[70px] md:top-[80px] z-30 bg-[var(--color-bg-page)]/95 backdrop-blur-lg border-b border-[var(--color-border)] py-4 shadow-sm"
       >
         <div className="max-w-6xl mx-auto flex flex-col items-center gap-3 px-6 text-center">
-          {/* 💬 Texto dinámico con animación */}
           <AnimatePresence mode="wait">
             <motion.p
               key={activeFilter}
@@ -101,15 +86,14 @@ export default function SkillsTab() {
             </motion.p>
           </AnimatePresence>
 
-          {/* 🔘 Filtros */}
           <div className="flex justify-center gap-4 flex-wrap">
             {filters.map((filter) => (
               <button
                 key={filter.value}
                 onClick={() => setActiveFilter(filter.value as any)}
                 className={`px-5 py-2 rounded-lg border text-sm font-medium transition-all duration-300 ${activeFilter === filter.value
-                  ? "bg-[var(--color-accent)] text-white border-[var(--color-accent)] shadow-[0_0_12px_var(--color-accent)]"
-                  : "border-[var(--color-border)] text-[var(--color-text-primary)] hover:border-[var(--color-accent)]"
+                    ? "bg-[var(--color-accent)] text-white border-[var(--color-accent)] shadow-[0_0_12px_var(--color-accent)]"
+                    : "border-[var(--color-border)] text-[var(--color-text-primary)] hover:border-[var(--color-accent)]"
                   }`}
               >
                 {filter.label}
@@ -119,7 +103,7 @@ export default function SkillsTab() {
         </div>
       </motion.div>
 
-      {/* 🧩 Skills grid content */}
+      {/* 🧩 Skills grid */}
       <div className="w-full max-w-6xl mx-auto py-20 px-6 md:px-12 lg:px-20 flex flex-col space-y-16">
         {categories.map((category) => (
           <motion.div
@@ -143,7 +127,8 @@ export default function SkillsTab() {
                 {filteredSkills
                   .filter((s) => s.category === category)
                   .map((skill) => {
-                    const Icon = skill.icon;
+                    const Icon = getIcon(skill.icon);
+
                     return (
                       <motion.div
                         key={skill.name}
@@ -155,11 +140,14 @@ export default function SkillsTab() {
                         transition={{ duration: 0.35, ease: "easeInOut" }}
                         whileHover={{
                           scale: 1.06,
-                          boxShadow: "0 0 16px var(--color-accent)",
+                          boxShadow: `0 0 16px ${skill.color}`,
                         }}
-                        className="group bg-[var(--color-card-bg)] border border-[var(--color-border)] hover:border-[var(--color-accent)] rounded-xl p-4 flex flex-col items-center justify-center text-center shadow-md transition-all duration-300"
+                        className="group bg-[var(--color-card-bg)] border border-[var(--color-border)] hover:border-transparent rounded-xl p-4 flex flex-col items-center justify-center text-center shadow-md transition-all duration-300"
                       >
-                        <Icon className="text-[2rem] text-[var(--color-accent)] mb-2 transition-transform duration-300 group-hover:scale-110" />
+                        <Icon
+                          className="text-[2rem] mb-2 transition-transform duration-300 group-hover:scale-110"
+                          style={{ color: skill.color }}
+                        />
                         <p className="text-sm text-[var(--color-text-primary)]">
                           {skill.name}
                         </p>

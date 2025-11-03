@@ -15,7 +15,7 @@ type Skill = {
 const skills: Skill[] = [
   // --- FRONTEND ---
   { name: "React", icon: "FaReact", category: "Frontend", projects: ["portfolio"], color: "#61DAFB" },
-  { name: "Next.js", icon: "FaJsSquare", category: "Frontend", projects: ["portfolio"], color: "#000000" },
+  { name: "Next.js", icon: "FaJsSquare", category: "Frontend", projects: ["portfolio"], color: "#202020ff" },
   { name: "TypeScript", icon: "FaJsSquare", category: "Frontend", projects: ["portfolio"], color: "#3178C6" },
   { name: "Tailwind CSS", icon: "FaCss3Alt", category: "Frontend", projects: ["portfolio"], color: "#06B6D4" },
 
@@ -92,8 +92,8 @@ export default function SkillsTab() {
                 key={filter.value}
                 onClick={() => setActiveFilter(filter.value as any)}
                 className={`px-5 py-2 rounded-lg border text-sm font-medium transition-all duration-300 ${activeFilter === filter.value
-                    ? "bg-[var(--color-accent)] text-white border-[var(--color-accent)] shadow-[0_0_12px_var(--color-accent)]"
-                    : "border-[var(--color-border)] text-[var(--color-text-primary)] hover:border-[var(--color-accent)]"
+                  ? "bg-[var(--color-accent)] text-white border-[var(--color-accent)] shadow-[0_0_12px_var(--color-accent)]"
+                  : "border-[var(--color-border)] text-[var(--color-text-primary)] hover:border-[var(--color-accent)]"
                   }`}
               >
                 {filter.label}

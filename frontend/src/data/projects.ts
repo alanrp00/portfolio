@@ -1,4 +1,17 @@
-export const projects = [
+export interface Project {
+  title: string;
+  description: string;
+  images?: string[];
+  tech?: { name: string; icon?: string; color?: string }[];
+  link?: string;
+  details?: {
+    overview: string;
+    features?: string[];
+  };
+  github?: string;
+}
+
+export const projects: Project[] = [
   {
     title: "Palabro",
     description:
@@ -18,6 +31,7 @@ export const projects = [
       "/images/projects/palabro-retro.png",
       "/images/projects/palabro-stats.png"
     ],
+    github: "https://github.com/alanrp00/Palabro"
   },
   {
     title: "Portfolio",

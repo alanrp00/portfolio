@@ -1,83 +1,133 @@
+// frontend/src/components/tabs/ProjectsTab.tsx
 "use client";
 
 import ProjectModal from "@/components/modals/ProjectModal";
-import { projects } from "@/data/projects";
+import { projects, type Project } from "@/data/projects";
+import { useAccentColor } from "@/hooks/useAccentColor";
 import { getIcon } from "@/utils/iconMap";
 import { AnimatePresence, motion } from "framer-motion";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 
-// Tipos
-type Tech = string | { name: string; icon?: string; color?: string };
+type TechItem = { name: string; icon?: string; color?: string };
 
 export default function ProjectsTab() {
-  const [selectedProject, setSelectedProject] = useState<(typeof projects)[0] | null>(null);
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [hovered, setHovered] = useState<string | null>(null); // ← para animar glow
+  const accent = useAccentColor();
+
+  // var local para usar en clases Tailwind (focus ring, etc.)
+  const accentVar = { ["--accent" as any]: accent } as React.CSSProperties;
+
+  const open = useCallback((p: Project) => setSelectedProject(p), []);
+  const close = useCallback(() => setSelectedProject(null), []);
+
+  const onKeyOpen = (e: React.KeyboardEvent, p: Project) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      open(p);
+    }
+  };
 
   return (
     <section className="w-full flex flex-col items-center justify-center py-10">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-fr w-full max-w-6xl"
-      >
-        {projects.map((project, i) => (
-          <motion.div
-            key={i}
-            whileHover={{
-              scale: 1.02,
-              boxShadow: "0 0 18px var(--color-accent)",
-              borderColor: "var(--color-accent)",
-            }}
-            transition={{ type: "spring", stiffness: 200, damping: 15 }}
-            className="relative bg-[var(--color-card-bg)] border border-[var(--color-border)] rounded-2xl p-6 flex flex-col justify-between min-h-[250px] h-full hover:border-[var(--color-accent)] transition-all cursor-pointer"
-            onClick={() => setSelectedProject(project)}
-          >
-            {/* Título y descripción */}
-            <div>
-              <h3 className="text-lg font-semibold text-[var(--color-text-primary)] mb-2">
-                {project.title}
-              </h3>
-              <p className="text-[var(--color-text-secondary)] mb-4 leading-relaxed">
-                {project.description}
-              </p>
-            </div>
+      <div className="max-w-6xl w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 px-4">
+        {projects.map((project) => {
+          const techs = project.tech ?? [];
+          const visible = techs.slice(0, 4);
+          const hidden = techs.slice(4);
+          const hasMore = hidden.length > 0;
+          const isHovered = hovered === project.title;
 
-            {/* Tecnologías */}
-            <div className="flex flex-wrap gap-2 mt-auto px-1 md:px-2">
-              {project.tech.slice(0, 3).map((t: Tech, j: number) => {
-                const techName = typeof t === "string" ? t : t.name;
-                const techIcon = typeof t === "string" ? undefined : t.icon;
-                const techColor = typeof t === "string" ? "var(--color-accent)" : t.color || "var(--color-accent)";
+          return (
+            <motion.article
+              key={project.title}
+              layout
+              whileHover={{ y: -2 }}
+              whileTap={{ scale: 0.995 }}
+              role="button"
+              tabIndex={0}
+              aria-label={`Abrir detalles del proyecto ${project.title}`}
+              onClick={() => open(project)}
+              onKeyDown={(e) => onKeyOpen(e, project)}
+              onHoverStart={() => setHovered(project.title)}
+              onHoverEnd={() => setHovered(null)}
+              style={accentVar}
+              // 👇 Glow animado + borde al estilo ExperienceTab
+              animate={{
+                borderColor: isHovered ? accent : "var(--color-border)",
+                boxShadow: isHovered
+                  ? `0 0 12px ${accent}`
+                  : "0 0 4px rgba(0,0,0,0.10)",
+              }}
+              transition={{ duration: 0.35, ease: "easeInOut" }}
+              className={[
+                "group cursor-pointer select-none rounded-2xl p-7 min-h-[240px]",
+                "border bg-[var(--color-card-bg)] shadow-sm",
+                "transition-all duration-200 focus:outline-none",
+                "focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-0",
+                "flex flex-col justify-between",
+              ].join(" ")}
+            >
+              <div className="flex flex-col gap-3">
+                <h3 className="text-xl font-semibold text-[var(--color-text-primary)]">
+                  {project.title}
+                </h3>
+                <p className="text-[var(--color-text-secondary)] leading-relaxed line-clamp-3">
+                  {project.description}
+                </p>
+              </div>
 
-                const Icon = getIcon(techIcon || "");
+              <div className="mt-5 flex flex-wrap gap-2">
+                {visible.map((t: TechItem) => {
+                  const Icon = getIcon(t.icon ?? t.name);
+                  return (
+                    <span
+                      key={`${project.title}-${t.name}`}
+                      className={[
+                        "inline-flex items-center gap-1.5 text-sm px-2.5 py-1 rounded-full",
+                        "border border-[var(--color-border-soft)] bg-[var(--color-card-bg)]",
+                        "transition-colors",
+                        // al pasar por la tarjeta, los chips también marcan el borde con el acento
+                        "group-hover:border-[var(--accent)]",
+                      ].join(" ")}
+                      title={t.name}
+                    >
+                      {Icon && (
+                        <Icon
+                          className="w-4 h-4"
+                          style={{ color: t.color ?? accent }}
+                        />
+                      )}
+                      <span className="text-[var(--color-text-secondary)]">{t.name}</span>
+                    </span>
+                  );
+                })}
 
-                return (
+                {hasMore && (
                   <span
-                    key={j}
-                    className="flex items-center gap-2 px-3 py-1 text-sm border border-[var(--color-accent)]/40 rounded-md text-[var(--color-accent)] bg-[var(--color-accent)]/10"
+                    className={[
+                      "inline-flex items-center justify-center text-sm w-8 px-0 py-1 rounded-full",
+                      "border border-[var(--color-border-soft)] bg-[var(--color-card-bg)]",
+                      "transition-colors group-hover:border-[var(--accent)]",
+                    ].join(" ")}
+                    title={hidden.map((t) => t.name).join(", ")}
+                    aria-label={`Tecnologías adicionales: ${hidden.map((t) => t.name).join(", ")}`}
                   >
-                    {techIcon && <Icon className="text-base" style={{ color: techColor }} />}
-                    {techName}
+                    …
                   </span>
-                );
-              })}
-              {project.tech.length > 3 && (
-                <span className="px-2 py-1 text-sm text-[var(--color-accent)] border border-[var(--color-accent)]/30 rounded-md">
-                  +{project.tech.length - 3}
-                </span>
-              )}
-            </div>
-          </motion.div>
-        ))}
-      </motion.div>
+                )}
+              </div>
+            </motion.article>
+          );
+        })}
+      </div>
 
-      {/* Modal del proyecto */}
       <AnimatePresence>
         {selectedProject && (
           <ProjectModal
             key={selectedProject.title}
             project={selectedProject}
-            onClose={() => setSelectedProject(null)}
+            onClose={close}
           />
         )}
       </AnimatePresence>

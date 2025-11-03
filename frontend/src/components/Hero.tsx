@@ -18,7 +18,9 @@ export default function Hero() {
   );
 
   const accent = useAccentColor();
-
+  // TODO: Hacer que el botón de contactarme abra un modal en lugar de ir a la sección
+  // TODO: Actualizar link al CV
+  // TODO: Añadir un footer con redes sociales
   return (
     <section
       id="inicio"
@@ -109,15 +111,18 @@ export default function Hero() {
       </motion.p>
 
       {/* Botones principales */}
+
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.6, duration: 0.6 }}
         className="flex flex-wrap justify-center gap-4"
       >
+
         <a href="#contacto" className="btn btn-primary">
           Contactarme
         </a>
+
         <a
           href="/cv.pdf"
           target="_blank"

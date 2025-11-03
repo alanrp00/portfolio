@@ -3,7 +3,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import ThemeToggle from "./ThemeToggle";
-
+// TODO: Hacer funcionar el Navbar
 export default function Navbar() {
   const [activeSection, setActiveSection] = useState("inicio");
   const [scrolled, setScrolled] = useState(false);
@@ -57,8 +57,8 @@ export default function Navbar() {
   return (
     <header
       className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${scrolled
-          ? "backdrop-blur-md bg-[var(--color-bg)]/80 border-b border-[var(--color-border)]"
-          : "bg-transparent"
+        ? "backdrop-blur-md bg-[var(--color-bg)]/80 border-b border-[var(--color-border)]"
+        : "bg-transparent"
         }`}
     >
       <nav className="container flex items-center justify-between py-4">
@@ -77,16 +77,16 @@ export default function Navbar() {
               <button
                 onClick={() => handleLinkClick(section.id)}
                 className={`transition-colors ${activeSection === section.id
-                    ? "text-[var(--color-accent)]"
-                    : "text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]"
+                  ? "text-[var(--color-accent)]"
+                  : "text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]"
                   }`}
               >
                 {section.label}
               </button>
               <span
                 className={`absolute left-0 -bottom-1 h-[2px] rounded-full transition-all duration-300 ${activeSection === section.id
-                    ? "w-full bg-[var(--color-accent)]"
-                    : "w-0 bg-transparent group-hover:w-full group-hover:bg-[var(--color-accent)]"
+                  ? "w-full bg-[var(--color-accent)]"
+                  : "w-0 bg-transparent group-hover:w-full group-hover:bg-[var(--color-accent)]"
                   }`}
               ></span>
             </li>
@@ -144,8 +144,8 @@ export default function Navbar() {
                   <button
                     onClick={() => handleLinkClick(section.id)}
                     className={`transition-colors ${activeSection === section.id
-                        ? "text-[var(--color-accent)]"
-                        : "text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]"
+                      ? "text-[var(--color-accent)]"
+                      : "text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]"
                       }`}
                   >
                     {section.label}

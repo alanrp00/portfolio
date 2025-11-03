@@ -42,14 +42,15 @@ const filters = [
 ];
 
 export default function SkillsTab() {
-  const [activeFilter, setActiveFilter] = useState<"all" | "portfolio" | "palabro">("all");
+  const [activeFilter, setActiveFilter] =
+    useState<"all" | "portfolio" | "palabro">("all");
 
   const filteredSkills =
     activeFilter === "all"
       ? skills
-      : skills.filter((skill) => skill.projects.includes(activeFilter));
+      : skills.filter((s) => s.projects.includes(activeFilter));
 
-  const categories = ["Frontend", "Backend", "DevOps & Tools"];
+  const categories = ["Frontend", "Backend", "DevOps & Tools"] as const;
 
   const itemVariants = {
     hidden: { opacity: 0, y: 30, scale: 0.95 },
@@ -92,8 +93,8 @@ export default function SkillsTab() {
                 key={filter.value}
                 onClick={() => setActiveFilter(filter.value as any)}
                 className={`px-5 py-2 rounded-lg border text-sm font-medium transition-all duration-300 ${activeFilter === filter.value
-                  ? "bg-[var(--color-accent)] text-white border-[var(--color-accent)] shadow-[0_0_12px_var(--color-accent)]"
-                  : "border-[var(--color-border)] text-[var(--color-text-primary)] hover:border-[var(--color-accent)]"
+                    ? "bg-[var(--color-accent)] text-white border-[var(--color-accent)] shadow-[0_0_12px_var(--color-accent)]"
+                    : "border-[var(--color-border)] text-[var(--color-text-primary)] hover:border-[var(--color-accent)]"
                   }`}
               >
                 {filter.label}
@@ -108,10 +109,10 @@ export default function SkillsTab() {
         {categories.map((category) => (
           <motion.div
             key={category}
+            // ⬇️ animación on-mount (sin whileInView/viewport)
             initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            viewport={{ once: true }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.45, ease: "easeOut" }}
             className="flex flex-col items-start w-full"
           >
             <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mb-6 flex items-center gap-2">
@@ -120,6 +121,7 @@ export default function SkillsTab() {
             </h3>
 
             <motion.div
+              key={activeFilter} // re-animar al cambiar filtro
               layout
               className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 w-full"
             >
@@ -128,7 +130,6 @@ export default function SkillsTab() {
                   .filter((s) => s.category === category)
                   .map((skill) => {
                     const Icon = getIcon(skill.icon);
-
                     return (
                       <motion.div
                         key={skill.name}

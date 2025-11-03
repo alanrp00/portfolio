@@ -3,110 +3,138 @@
 import { certificates, formalEducation } from "@/data/education";
 import { getIcon } from "@/utils/iconMap";
 import { motion } from "framer-motion";
-import {
-  FaCertificate,
-  FaGraduationCap
-} from "react-icons/fa";
 
 export default function EducationTab() {
   return (
-    <section className="relative w-full min-h-screen flex flex-col items-center justify-center py-16 bg-[var(--color-bg-page)]">
-      <div className="w-full max-w-6xl px-6 md:px-10 flex flex-col gap-24">
-        {/* 🎓 Educación oficial */}
-        <div>
-          <h2 className="text-2xl md:text-3xl font-bold text-[var(--color-text-primary)] mb-12 flex items-center gap-3">
-            <FaGraduationCap className="text-[var(--color-accent)] text-2xl" />
-            Educación Oficial
-          </h2>
+    <section className="relative w-full flex flex-col items-center justify-center py-16 bg-[var(--color-bg-page)]">
+      <div className="w-full max-w-6xl px-6 md:px-10">
+        {/* Grid 2 columnas (1 en móvil) */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-16">
+          {/* ─────────── Columna Izquierda: Educación Oficial ─────────── */}
+          <div className="flex flex-col gap-6">
+            {/* Header sticky de la columna */}
+            <div className="sticky top-[80px] z-20 -mt-4 pt-4 pb-3 bg-[var(--color-bg-page)]/90 backdrop-blur border-b border-[var(--color-border)]">
+              <h2 className="text-2xl md:text-3xl font-bold text-[var(--color-text-primary)]">
+                Educación <span className="text-[var(--color-accent)]">Oficial</span>
+              </h2>
+              <p className="mt-1 text-[var(--color-text-secondary)] text-sm">
+                Estudios formales y títulos obtenidos.
+              </p>
+            </div>
 
-          <div className="relative w-full">
-            {/* Línea vertical */}
-            <div className="hidden md:block absolute left-1/2 transform -translate-x-1/2 h-full w-[3px] bg-[var(--color-border)]" />
-
-            {/* Tarjetas en timeline */}
-            <div className="flex flex-col gap-16 relative">
+            <div className="flex flex-col gap-6">
               {formalEducation.map((edu, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 50 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: index * 0.15 }}
-                  className={`relative flex flex-col md:flex-row items-center ${index % 2 === 0
-                    ? "md:justify-start md:pr-[55%]"
-                    : "md:justify-end md:pl-[55%]"
-                    }`}
+                <motion.article
+                  key={`${edu.title}-${index}`}
+                  initial={{ opacity: 0, y: 24 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.45, ease: "easeOut", delay: index * 0.05 }}
+                  whileHover={{ y: -2, boxShadow: "0 0 18px var(--color-accent)" }}
+                  className="bg-[var(--color-card-bg)] border border-[var(--color-border)] rounded-2xl p-6 shadow-sm transition-all duration-300 hover:border-[var(--color-accent)]"
                 >
-                  {/* Punto */}
-                  <div className="hidden md:block absolute left-1/2 transform -translate-x-1/2 w-5 h-5 bg-[var(--color-accent)] border-4 border-[var(--color-bg-page)] rounded-full shadow-md z-20" />
-
-                  {/* Tarjeta */}
-                  <div
-                    className={`relative w-full md:w-[45%] bg-[var(--color-card-bg)] border border-[var(--color-border)] rounded-2xl shadow-md p-6 transition-all duration-300 hover:border-[var(--color-accent)] hover:shadow-[0_0_20px_var(--color-accent)]`}
-                  >
-                    <h3 className="text-lg font-semibold text-[var(--color-text-primary)] mb-2">
-                      {edu.title}
-                    </h3>
-                    <p className="text-[var(--color-text-secondary)] mb-1 font-medium">
-                      {edu.center}
-                    </p>
-                    <p className="text-sm text-[var(--color-text-secondary)] italic mb-2">
-                      {edu.date}
-                    </p>
+                  <h3 className="text-lg font-semibold text-[var(--color-text-primary)] mb-1">
+                    {edu.title}
+                  </h3>
+                  <p className="text-[var(--color-text-secondary)] mb-1 font-medium">
+                    {edu.center}
+                  </p>
+                  <p className="text-sm text-[var(--color-accent)] italic mb-3">
+                    {edu.date}
+                  </p>
+                  {edu.description && (
                     <p className="text-[var(--color-text-secondary)] leading-relaxed">
                       {edu.description}
                     </p>
-                  </div>
-                </motion.div>
+                  )}
+                </motion.article>
               ))}
             </div>
           </div>
-        </div>
 
-        {/* 🏅 Certificados y cursos */}
-        <div>
-          <h2 className="text-2xl md:text-3xl font-bold text-[var(--color-text-primary)] mb-12 flex items-center gap-3">
-            <FaCertificate className="text-[var(--color-accent)] text-2xl" />
-            Certificados y Cursos
-          </h2>
+          {/* ─────────── Columna Derecha: Certificados y Cursos ─────────── */}
+          <div className="flex flex-col gap-6">
+            {/* Header sticky de la columna */}
+            <div className="sticky top-[80px] z-20 -mt-4 pt-4 pb-3 bg-[var(--color-bg-page)]/90 backdrop-blur border-b border-[var(--color-border)]">
+              <h2 className="text-2xl md:text-3xl font-bold text-[var(--color-text-primary)]">
+                Certificados <span className="text-[var(--color-accent)]">&amp; Cursos</span>
+              </h2>
+              <p className="mt-1 text-[var(--color-text-secondary)] text-sm">
+                Formación adicional y especializaciones.
+              </p>
+            </div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
-          >
-            {certificates.map((cert, i) => {
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.45, ease: "easeOut" }}
+              className="grid grid-cols-1 sm:grid-cols-2 gap-6"
+            >
+              {certificates.map((cert, i) => {
+                const Icon = getIcon(cert.icon);
+                const url = (cert as any).url as string | undefined;
+                const isDisabled = !url;
 
-              const Icon = getIcon(cert.icon);
+                return (
+                  <motion.article
+                    key={`${cert.title}-${i}`}
+                    initial={{ opacity: 0, y: 24 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.35, delay: i * 0.04, ease: "easeOut" }}
+                    whileHover={{ scale: 1.03, boxShadow: `0 0 18px ${cert.color}` }}
+                    className="bg-[var(--color-card-bg)] border border-[var(--color-border)] rounded-2xl p-6 shadow-sm flex flex-col items-center text-center transition-all duration-300 hover:border-[var(--color-accent)] w-full min-h-[200px] sm:min-h-[220px] lg:min-h-[220px] justify-between"
+                  >
+                    <div className="flex flex-col items-center">
+                      {Icon && (
+                        <Icon
+                          className="text-4xl mb-3 transition-transform duration-300"
+                          style={{ color: cert.color }}
+                        />
+                      )}
+                      <h3 className="text-base md:text-lg font-semibold text-[var(--color-text-primary)] mb-1">
+                        {cert.title}
+                      </h3>
+                      <p className="text-[var(--color-text-secondary)] text-sm mb-1">
+                        {cert.provider}
+                      </p>
+                      {cert.date && (
+                        <p className="text-[var(--color-text-secondary)] text-sm italic mb-3">
+                          {cert.date}
+                        </p>
+                      )}
+                    </div>
 
-              return (
-                <motion.div
-                  key={cert.title}
-                  whileHover={{
-                    scale: 1.05,
-                    boxShadow: `0 0 20px ${cert.color}`,
-                  }}
-                  className="relative bg-[var(--color-card-bg)] border border-[var(--color-border)] rounded-2xl p-6 shadow-md flex flex-col items-center justify-center text-center transition-all duration-300 hover:border-[var(--color-accent)]"
-                >
-                  <Icon
-                    className="text-4xl mb-3 transition-transform duration-300"
-                    style={{ color: cert.color }}
-                  />
-                  <h3 className="text-lg font-semibold text-[var(--color-text-primary)] mb-1">
-                    {cert.title}
-                  </h3>
-                  <p className="text-[var(--color-text-secondary)] text-sm mb-1">
-                    {cert.provider}
-                  </p>
-                  <p className="text-[var(--color-text-secondary)] text-sm italic">
-                    {cert.date}
-                  </p>
-                </motion.div>
-              );
-            })}
-          </motion.div>
+                    {/* Botón Ver credencial */}
+                    <a
+                      href={url || "#"}
+                      target={isDisabled ? "_self" : "_blank"}
+                      rel="noreferrer"
+                      aria-disabled={isDisabled}
+                      className={`inline-flex items-center gap-2 rounded-xl px-3 py-1.5 border text-sm font-medium transition-colors mt-2
+                        ${isDisabled
+                          ? "border-[var(--color-border)] text-[var(--color-text-secondary)] opacity-60 cursor-not-allowed"
+                          : "border-[var(--color-accent)] text-[var(--color-accent)] hover:bg-[var(--color-accent)]/10"
+                        }`}
+                      onClick={(e) => {
+                        if (isDisabled) e.preventDefault();
+                      }}
+                    >
+                      Ver credencial
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                        className="w-4 h-4"
+                        aria-hidden="true"
+                      >
+                        <path d="M13.5 4.5a.75.75 0 0 0 0 1.5h4.19l-8.72 8.72a.75.75 0 1 0 1.06 1.06l8.72-8.72V11a.75.75 0 0 0 1.5 0V4.5h-6.75Z" />
+                        <path d="M5.25 6A2.25 2.25 0 0 0 3 8.25v9A2.25 2.25 0 0 0 5.25 19.5h9a2.25 2.25 0 0 0 2.25-2.25V12a.75.75 0 0 0-1.5 0v5.25a.75.75 0 0 1-.75.75h-9a.75.75 0 0 1-.75-.75v-9a.75.75 0 0 1 .75-.75H11a.75.75 0 0 0 0-1.5H5.25Z" />
+                      </svg>
+                    </a>
+                  </motion.article>
+                );
+              })}
+            </motion.div>
+          </div>
         </div>
       </div>
     </section>

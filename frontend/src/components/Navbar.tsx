@@ -24,7 +24,7 @@ export default function Navbar() {
     { id: "experiencia", label: "Experiencia" },
     { id: "habilidades", label: "Habilidades" },
     { id: "educacion", label: "Educación" },
-    { id: "contact", label: "Contacto" },
+    { id: "footer", label: "Contacto" },
   ];
 
   // Detectar scroll para blur y sección activa

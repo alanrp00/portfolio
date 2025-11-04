@@ -24,6 +24,7 @@ export default function Navbar() {
     { id: "experiencia", label: "Experiencia" },
     { id: "habilidades", label: "Habilidades" },
     { id: "educacion", label: "Educación" },
+    { id: "contact", label: "Contacto" },
   ];
 
   // Detectar scroll para blur y sección activa
@@ -71,7 +72,7 @@ export default function Navbar() {
       <nav className="container flex items-center justify-between py-4">
         {/* Logo */}
         <a
-          href="#inicio"
+          href="#home"
           onClick={(e) => handleAnchorClick(e, "inicio")}
           className="text-lg font-semibold text-[var(--color-text-primary)] hover:text-[var(--color-accent)] transition-colors"
           aria-label="Ir al inicio"

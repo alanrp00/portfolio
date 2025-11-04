@@ -84,8 +84,8 @@ export default function ProjectsTab() {
                     <span
                       key={`${project.title}-${t.name}`}
                       className={[
-                        "inline-flex items-center gap-1.5 text-sm px-2.5 py-1 rounded-full",
-                        "border border-[var(--color-border-soft)] bg-[var(--color-card-bg)]",
+                        "inline-flex items-center gap-1.5 text-sm px-2.5 py-1 rounded-xl",
+                        "border border-[var(--accent)] bg-[var(--color-card-bg)]",
                         "transition-colors",
                         // al pasar por la tarjeta, los chips también marcan el borde con el acento
                         "group-hover:border-[var(--accent)]",
@@ -106,7 +106,7 @@ export default function ProjectsTab() {
                 {hasMore && (
                   <span
                     className={[
-                      "inline-flex items-center justify-center text-sm w-8 px-0 py-1 rounded-full",
+                      "inline-flex items-center justify-center text-sm w-8 px-0 py-1 rounded-xl",
                       "border border-[var(--color-border-soft)] bg-[var(--color-card-bg)]",
                       "transition-colors group-hover:border-[var(--accent)]",
                     ].join(" ")}

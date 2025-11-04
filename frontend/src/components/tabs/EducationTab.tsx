@@ -81,7 +81,7 @@ export default function EducationTab() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.35, delay: i * 0.04, ease: "easeOut" }}
                     whileHover={{ scale: 1.03, boxShadow: `0 0 18px ${cert.color}` }}
-                    className="bg-[var(--color-card-bg)] border border-[var(--color-border)] rounded-2xl p-6 shadow-sm flex flex-col items-center text-center transition-all duration-300 hover:border-[var(--color-accent)] w-full min-h-[200px] sm:min-h-[220px] lg:min-h-[220px] justify-between"
+                    className="bg-[var(--color-card-bg)] border border-[var(--color-border)] rounded-2xl p-6 shadow-sm flex flex-col items-center text-center transition-all duration-300 w-full min-h-[200px] sm:min-h-[220px] lg:min-h-[220px] justify-between"
                   >
                     <div className="flex flex-col items-center">
                       {Icon && (

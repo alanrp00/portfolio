@@ -273,7 +273,7 @@ export default function ProjectModal({ project, onClose }: Props) {
                       return (
                         <span
                           key={`${project.title}-${t.name}`}
-                          className="inline-flex items-center gap-1.5 text-sm px-2.5 py-1 rounded-full border border-[var(--accent)] bg-[var(--color-card-bg)] hover:bg-[var(--accent)]/10 transition-colors"
+                          className="inline-flex items-center gap-1.5 text-sm px-2.5 py-1 rounded-xl border border-[var(--accent)] bg-[var(--color-card-bg)] hover:bg-[var(--accent)]/10 transition-colors"
                           title={t.name}
                         >
                           {Icon && <Icon className="w-4 h-4" style={{ color: t.color ?? accent }} />}

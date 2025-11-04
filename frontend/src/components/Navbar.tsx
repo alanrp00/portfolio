@@ -3,7 +3,16 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import ThemeToggle from "./ThemeToggle";
-// TODO: Hacer funcionar el Navbar
+
+const NAV_OFFSET = 80;
+
+function scrollToAnchor(id: string) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const y = el.getBoundingClientRect().top + window.scrollY - NAV_OFFSET;
+  window.scrollTo({ top: y, behavior: "smooth" });
+}
+
 export default function Navbar() {
   const [activeSection, setActiveSection] = useState("inicio");
   const [scrolled, setScrolled] = useState(false);
@@ -17,41 +26,39 @@ export default function Navbar() {
     { id: "educacion", label: "Educación" },
   ];
 
-  // 🧭 Detectar scroll para navbar blur y sección activa
+  // Detectar scroll para blur y sección activa
   useEffect(() => {
     const onScroll = () => {
-      const scrollPosition = window.scrollY;
-      setScrolled(scrollPosition > 10);
+      setScrolled(window.scrollY > 10);
 
       for (const section of sections) {
         const el = document.getElementById(section.id);
         if (el) {
           const rect = el.getBoundingClientRect();
-          if (rect.top <= 100 && rect.bottom >= 100) {
+          if (rect.top <= NAV_OFFSET + 40 && rect.bottom >= NAV_OFFSET + 40) {
             setActiveSection(section.id);
           }
         }
       }
     };
-    window.addEventListener("scroll", onScroll);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // 🚫 Bloquear scroll del body cuando el menú está abierto
+  // Bloquear scroll del body cuando el menú móvil está abierto
   useEffect(() => {
-    if (menuOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
+    document.body.style.overflow = menuOpen ? "hidden" : "";
   }, [menuOpen]);
 
-  const handleLinkClick = (id: string) => {
+  // Manejar clic en los enlaces
+  const handleAnchorClick = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
+    e.preventDefault();
     setMenuOpen(false);
-    const element = document.getElementById(id);
-    if (element) {
-      window.scrollTo({ top: element.offsetTop - 80, behavior: "smooth" });
-    }
+    // Actualiza el hash (dispara hashchange → TabsSection cambiará de tab)
+    window.location.hash = id;
+    // Scroll suave con offset
+    requestAnimationFrame(() => scrollToAnchor(id));
   };
 
   return (
@@ -65,7 +72,9 @@ export default function Navbar() {
         {/* Logo */}
         <a
           href="#inicio"
+          onClick={(e) => handleAnchorClick(e, "inicio")}
           className="text-lg font-semibold text-[var(--color-text-primary)] hover:text-[var(--color-accent)] transition-colors"
+          aria-label="Ir al inicio"
         >
           Alán<span className="text-[var(--color-accent)]">.</span>
         </a>
@@ -74,32 +83,36 @@ export default function Navbar() {
         <ul className="hidden md:flex gap-8 text-sm font-medium">
           {sections.map((section) => (
             <li key={section.id} className="relative group">
-              <button
-                onClick={() => handleLinkClick(section.id)}
+              <a
+                href={`#${section.id}`}
+                onClick={(e) => handleAnchorClick(e, section.id)}
+                aria-current={activeSection === section.id ? "page" : undefined}
                 className={`transition-colors ${activeSection === section.id
                   ? "text-[var(--color-accent)]"
                   : "text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]"
                   }`}
               >
                 {section.label}
-              </button>
+              </a>
               <span
                 className={`absolute left-0 -bottom-1 h-[2px] rounded-full transition-all duration-300 ${activeSection === section.id
                   ? "w-full bg-[var(--color-accent)]"
                   : "w-0 bg-transparent group-hover:w-full group-hover:bg-[var(--color-accent)]"
                   }`}
-              ></span>
+              />
             </li>
           ))}
         </ul>
 
-        {/* ThemeToggle + Botón menú móvil */}
+        {/* ThemeToggle + botón menú móvil */}
         <div className="flex items-center gap-2">
           <ThemeToggle />
           <button
             className="md:hidden p-2 rounded-lg hover:bg-[var(--color-button-bg)] transition"
             onClick={() => setMenuOpen((prev) => !prev)}
-            aria-label="Abrir menú móvil"
+            aria-label={menuOpen ? "Cerrar menú" : "Abrir menú"}
+            aria-expanded={menuOpen}
+            aria-controls="mobile-menu"
           >
             {menuOpen ? (
               <svg
@@ -132,24 +145,29 @@ export default function Navbar() {
       <AnimatePresence>
         {menuOpen && (
           <motion.div
+            id="mobile-menu"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.25 }}
             className="md:hidden fixed top-16 left-0 w-full h-[calc(100vh-64px)] bg-[var(--color-bg)]/95 backdrop-blur-md border-t border-[var(--color-border)] z-40"
+            role="dialog"
+            aria-modal="true"
           >
             <ul className="flex flex-col items-center justify-center gap-8 py-6 text-lg font-medium h-full">
               {sections.map((section) => (
                 <li key={section.id}>
-                  <button
-                    onClick={() => handleLinkClick(section.id)}
+                  <a
+                    href={`#${section.id}`}
+                    onClick={(e) => handleAnchorClick(e, section.id)}
+                    aria-current={activeSection === section.id ? "page" : undefined}
                     className={`transition-colors ${activeSection === section.id
                       ? "text-[var(--color-accent)]"
                       : "text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]"
                       }`}
                   >
                     {section.label}
-                  </button>
+                  </a>
                 </li>
               ))}
             </ul>

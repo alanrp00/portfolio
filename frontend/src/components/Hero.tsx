@@ -23,7 +23,7 @@ export default function Hero() {
   // TODO: Añadir un footer con redes sociales
   return (
     <section
-      id="inicio"
+      id="home"
       className="relative flex flex-col items-center justify-center min-h-screen text-center container"
     >
       {/* 🧑‍💻 Avatar con glow y sombra flotante 3D */}

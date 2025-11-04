@@ -60,6 +60,7 @@ export default function ExperienceTab() {
 
   return (
     <div
+      id="experience"
       ref={containerRef}
       className="relative w-full max-w-6xl mx-auto py-20 px-4 md:px-8"
     >

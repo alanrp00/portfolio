@@ -6,7 +6,9 @@ import { motion } from "framer-motion";
 
 export default function EducationTab() {
   return (
-    <section className="relative w-full flex flex-col items-center justify-center py-16 bg-[var(--color-bg-page)]">
+    <section
+      id="education"
+      className="relative w-full flex flex-col items-center justify-center py-16 bg-[var(--color-bg-page)]">
       <div className="w-full max-w-6xl px-6 md:px-10">
         {/* Grid 2 columnas (1 en móvil) */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-16">

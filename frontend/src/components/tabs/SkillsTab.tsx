@@ -65,7 +65,9 @@ export default function SkillsTab() {
   };
 
   return (
-    <section className="relative w-full bg-[var(--color-bg-page)]">
+    <section
+      id="skills"
+      className="relative w-full bg-[var(--color-bg-page)]">
       {/* 🔘 Sticky Filter Bar */}
       <motion.div
         initial={{ y: -20, opacity: 0 }}
@@ -93,8 +95,8 @@ export default function SkillsTab() {
                 key={filter.value}
                 onClick={() => setActiveFilter(filter.value as any)}
                 className={`px-5 py-2 rounded-lg border text-sm font-medium transition-all duration-300 ${activeFilter === filter.value
-                    ? "bg-[var(--color-accent)] text-white border-[var(--color-accent)] shadow-[0_0_12px_var(--color-accent)]"
-                    : "border-[var(--color-border)] text-[var(--color-text-primary)] hover:border-[var(--color-accent)]"
+                  ? "bg-[var(--color-accent)] text-white border-[var(--color-accent)] shadow-[0_0_12px_var(--color-accent)]"
+                  : "border-[var(--color-border)] text-[var(--color-text-primary)] hover:border-[var(--color-accent)]"
                   }`}
               >
                 {filter.label}

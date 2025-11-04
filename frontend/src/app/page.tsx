@@ -1,3 +1,4 @@
+import Footer from "@/components/Footer";
 import Hero from "@/components/Hero";
 import Navbar from "@/components/Navbar";
 import TabsSection from "@/components/TabSection";
@@ -8,6 +9,7 @@ export default function Page() {
       <Navbar />
       <Hero />
       <TabsSection />
+      <Footer />
     </main>
   );
 }

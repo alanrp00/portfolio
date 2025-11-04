@@ -7,14 +7,17 @@ import {
   FaCss3Alt,
   FaDatabase,
   FaDocker,
+  FaEnvelope,
   FaFigma,
   FaGitAlt,
   FaGithub,
   FaGitlab,
   FaGoogle,
   FaHtml5,
+  FaInstagram,
   FaJava,
   FaJsSquare,
+  FaLinkedin,
   FaLinux,
   FaNodeJs,
   FaPython,
@@ -55,6 +58,11 @@ export const iconMap: Record<string, React.ElementType> = {
   FaLinux,
   FaWindows,
   FaApple,
+
+  // --- REDES SOCIALES / CONTACTO ---
+  FaLinkedin,
+  FaInstagram,
+  FaEnvelope,
 };
 
 /**

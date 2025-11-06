@@ -77,7 +77,7 @@ export default function Navbar() {
           className="text-lg font-semibold text-[var(--color-text-primary)] hover:text-[var(--color-accent)] transition-colors"
           aria-label="Ir al inicio"
         >
-          alanrivas<span className="text-[var(--color-accent)]">.dev</span>
+          alanrivas<span className="text-[var(--color-accent)]">.com</span>
         </a>
 
         {/* Links Desktop */}

@@ -33,9 +33,9 @@ export default function Footer() {
   }, []);
 
   const SOCIALS: Social[] = [
-    { name: "GitHub", href: "https://github.com/tu-usuario", icon: "FaGithub", color: theme === "dark" ? "#E5E5E5" : "#181717" },
-    { name: "LinkedIn", href: "https://www.linkedin.com/in/tu-usuario", icon: "FaLinkedin", color: "#0A66C2" },
-    { name: "Instagram", href: "https://www.instagram.com/tu-usuario", icon: "FaInstagram", color: "#E4405F" },
+    { name: "GitHub", href: "https://github.com/alanrp00", icon: "FaGithub", color: theme === "dark" ? "#E5E5E5" : "#181717" },
+    { name: "LinkedIn", href: "https://www.linkedin.com/in/alán-rivas-pérez", icon: "FaLinkedin", color: "#0A66C2" },
+    { name: "Instagram", href: "https://www.instagram.com/alanrp00", icon: "FaInstagram", color: "#E4405F" },
     { name: "Email", icon: "FaEnvelope", color: "#D14836", sr: "Abrir formulario de contacto", isButton: true },
   ];
 
@@ -90,7 +90,7 @@ export default function Footer() {
       <ContactModal
         open={openContact}
         onClose={() => setOpenContact(false)}
-        toEmail="tu-email@dominio.com"
+        toEmail="alanrivasperez00@gmail.com"
       />
     </footer>
   );

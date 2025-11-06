@@ -1,95 +1,75 @@
 "use client";
 
+import { skills as DATA } from "@/data/skills";
 import { getIcon, iconMap } from "@/utils/iconMap";
 import { AnimatePresence, motion } from "framer-motion";
 import { useMemo, useState } from "react";
 
-type ProjectKey = "portfolio" | "palabro";
-type Category = "Frontend" | "Backend" | "DevOps & Tools";
-
-type Skill = {
-  name: string;
-  /** Clave del icono en iconMap (recomendado) */
-  icon?: string;
-  /** Alternativa: nombre visible, lo resolvemos con heurística */
-  iconName?: string;
-  category: Category;
-  projects: ProjectKey[];
-  color?: string;
-};
-
-/** Colores de marca (si no das color en el dato) */
+/** Colores de marca (extiende cuando quieras) */
 const TECH_COLORS: Record<string, string> = {
   React: "#61DAFB",
   "Next.js": "#000000",
   TypeScript: "#3178C6",
-  JavaScript: "#F7DF1E",
   "Tailwind CSS": "#38BDF8",
-  HTML5: "#E34F26",
-  CSS3: "#1572B6",
-  Node: "#43853D",
+  "Framer Motion": "#0055FF",
+
+  "Node.js": "#43853D",
+  Express: "#000000",
   MongoDB: "#47A248",
+  DataStore: "#FFCA28",
+  Java: "#E76F00",
+
   Docker: "#2496ED",
   Git: "#F05032",
+  GitHub: "#181717",
+  Vercel: "#000000",
   Linux: "#FCC624",
+  Postman: "#FF6C37",
+  Selenium: "#43B02A",
+  Jira: "#2684FF",
+
   Kotlin: "#7F52FF",
   "Jetpack Compose": "#4285F4",
-  "Jetpack DataStore": "#336791",
+  "Navigation Compose": "#3DDC84",
 };
 
-const skills: Skill[] = [
-  // --- FRONTEND ---
-  { name: "React", icon: "FaReact", category: "Frontend", projects: ["portfolio"] },
-  { name: "Next.js", icon: "SiNextdotjs", category: "Frontend", projects: ["portfolio"] },
-  { name: "TypeScript", icon: "SiTypescript", category: "Frontend", projects: ["portfolio"] },
-  { name: "Tailwind CSS", icon: "SiTailwindcss", category: "Frontend", projects: ["portfolio"] },
-
-  // --- BACKEND ---
-  { name: "Node.js", icon: "FaNodeJs", category: "Backend", projects: ["portfolio"] },
-  { name: "MongoDB", icon: "SiMongodb", category: "Backend", projects: ["portfolio"] },
-
-  // --- DEVOPS ---
-  { name: "Docker", icon: "FaDocker", category: "DevOps & Tools", projects: ["portfolio"] },
-  { name: "Git", icon: "FaGitAlt", category: "DevOps & Tools", projects: ["portfolio", "palabro"] },
-  { name: "Linux", icon: "FaLinux", category: "DevOps & Tools", projects: ["portfolio"] },
-
-  // --- PALABRO (Android) ---
-  { name: "Kotlin", icon: "SiKotlin", category: "Backend", projects: ["palabro"] },
-  { name: "Jetpack Compose", icon: "SiJetpackcompose", category: "Frontend", projects: ["palabro"] },
-  { name: "Navigation Compose", icon: "FaAndroid", category: "Frontend", projects: ["palabro"] },
-  { name: "Jetpack DataStore", icon: "FaDatabase", category: "Backend", projects: ["palabro"] },
+/** Filtros por origen del proyecto + 'general' (sin proyecto) */
+const FILTERS = [
+  { label: "Todos", value: "all" as const },
+  { label: "Portfolio", value: "portfolio" as const },
+  { label: "Palabro", value: "palabro" as const },
 ];
 
-const filters = [
-  { label: "Todos", value: "all" },
-  { label: "Portfolio", value: "portfolio" },
-  { label: "Palabro", value: "palabro" },
-] as const;
+type FilterValue = (typeof FILTERS)[number]["value"];
+
+/** Categorías dinámicas a partir del dato (incluye Mobile) */
+const CATEGORIES = Array.from(new Set(DATA.map((s) => s.category))) as Array<
+  "Frontend" | "Backend" | "DevOps & Tools"
+>;
 
 export default function SkillsTab() {
-  const [activeFilter, setActiveFilter] = useState<(typeof filters)[number]["value"]>("all");
-  const categories: Category[] = ["Frontend", "Backend", "DevOps & Tools"];
+  const [activeFilter, setActiveFilter] = useState<FilterValue>("all");
 
-  const filteredSkills = useMemo(() => {
-    const base = activeFilter === "all" ? skills : skills.filter((s) => s.projects.includes(activeFilter as ProjectKey));
-    return base;
+  const filtered = useMemo(() => {
+    if (activeFilter === "all") return DATA;
+    return DATA.filter((s) => s.projects.includes(activeFilter));
   }, [activeFilter]);
 
   const itemVariants = {
     hidden: { opacity: 0, y: 30, scale: 0.95 },
     visible: { opacity: 1, y: 0, scale: 1 },
     exit: { opacity: 0, y: 20, scale: 0.9 },
-  };
+  } as const;
 
-  const filterDescriptions: Record<(typeof filters)[number]["value"], string> = {
-    all: "Mostrando todas las tecnologías utilizadas en mis proyectos.",
-    portfolio: "Mostrando tecnologías empleadas en este portfolio web.",
-    palabro: "Mostrando tecnologías utilizadas en el proyecto Android Palabro.",
+  const descriptions: Record<FilterValue, string> = {
+    all: "Todas las tecnologías que uso en mis proyectos.",
+    portfolio: "Tecnologías empleadas en este portfolio web.",
+    palabro: "Tecnologías empleadas en el proyecto Android Palabro.",
   };
 
   return (
     <section id="skills" className="relative w-full bg-[var(--color-bg-page)]">
-      {/* Sticky Filter Bar */}
+      {/* Barra de filtros */}
       <motion.div
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
@@ -106,12 +86,12 @@ export default function SkillsTab() {
               transition={{ duration: 0.3 }}
               className="text-sm text-[var(--color-text-secondary)]"
             >
-              {filterDescriptions[activeFilter]}
+              {descriptions[activeFilter]}
             </motion.p>
           </AnimatePresence>
 
           <div className="flex justify-center gap-4 flex-wrap">
-            {filters.map((f) => (
+            {FILTERS.map((f) => (
               <button
                 key={f.value}
                 onClick={() => setActiveFilter(f.value)}
@@ -127,9 +107,9 @@ export default function SkillsTab() {
         </div>
       </motion.div>
 
-      {/* Skills grid */}
+      {/* Grid por categorías */}
       <div className="w-full max-w-6xl mx-auto py-20 px-6 md:px-12 lg:px-20 flex flex-col space-y-16">
-        {categories.map((category) => (
+        {CATEGORIES.map((category) => (
           <motion.div
             key={category}
             initial={{ opacity: 0, y: 40 }}
@@ -142,20 +122,22 @@ export default function SkillsTab() {
               {category}
             </h3>
 
-            <motion.div key={activeFilter} layout className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 w-full">
+            <motion.div
+              key={activeFilter}
+              layout
+              className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 w-full"
+            >
               <AnimatePresence mode="popLayout">
-                {filteredSkills
+                {filtered
                   .filter((s) => s.category === category)
                   .map((skill) => {
                     const Icon =
-                      (skill.icon && iconMap[skill.icon]) ||
-                      (skill.iconName && (iconMap[skill.iconName] || getIcon(skill.iconName))) ||
-                      getIcon(skill.name);
-                    const color = skill.color ?? TECH_COLORS[skill.name] ?? "var(--color-accent)";
+                      (skill.icon && iconMap[skill.icon]) || getIcon(skill.name);
+                    const color = TECH_COLORS[skill.name] ?? "var(--color-accent)";
 
                     return (
                       <motion.div
-                        key={skill.name}
+                        key={`${skill.name}-${skill.category}`}
                         layout
                         variants={itemVariants}
                         initial="hidden"
@@ -164,8 +146,14 @@ export default function SkillsTab() {
                         transition={{ duration: 0.35, ease: "easeInOut" }}
                         whileHover={{ scale: 1.06, boxShadow: `0 0 16px ${color}` }}
                         className="group bg-[var(--color-card-bg)] border border-[var(--color-border)] hover:border-transparent rounded-xl p-4 flex flex-col items-center justify-center text-center shadow-md transition-all duration-300"
+                        title={skill.name}
                       >
-                        <Icon className="text-[2rem] mb-2 transition-transform duration-300 group-hover:scale-110" style={{ color }} />
+                        {Icon && (
+                          <Icon
+                            className="text-[2rem] mb-2 transition-transform duration-300 group-hover:scale-110"
+                            style={{ color }}
+                          />
+                        )}
                         <p className="text-sm text-[var(--color-text-primary)]">{skill.name}</p>
                       </motion.div>
                     );

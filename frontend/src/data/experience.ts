@@ -2,6 +2,7 @@ export type Experience = {
   title: string;
   company: string;
   period: string;
+  description?: string;
   points: string[];
   tech?: string[];
   scope?: "personal" | "work";
@@ -9,62 +10,76 @@ export type Experience = {
 
 export const experiences: Experience[] = [
   {
+    title: "Desarrollador Full Stack (Portfolio)",
+    company: "Proyecto Personal",
+    period: "2025 - Actualidad",
+    points: [
+      "Diseño y desarrollo de un portfolio web moderno con Next.js y TypeScript.",
+      "Implementación de animaciones con Framer Motion y diseño responsivo con Tailwind CSS.",
+      "Integración de backend con Node.js, Express y base de datos MongoDB.",
+      "Optimización SEO y despliegue mediante Vercel y Docker.",
+    ],
+    tech: [
+      "Next.js",
+      "React",
+      "TypeScript",
+      "Tailwind CSS",
+      "Framer Motion",
+      "Node.js",
+      "Express",
+      "MongoDB",
+      "Docker",
+      "Git",
+      "GitHub",
+      "Vercel",
+    ],
+    scope: "personal",
+  },
+  {
     title: "Desarrollador Android (Proyecto Palabro)",
     company: "Proyecto Personal",
     period: "2023 - 2024",
     points: [
       "Desarrollo de un juego tipo Wordle desde cero utilizando Kotlin y Jetpack Compose.",
       "Implementación de arquitectura MVVM y persistencia local con Jetpack DataStore.",
-      "Diseño de animaciones fluidas y UI adaptada a Material Design 3."
+      "Diseño de animaciones fluidas y UI adaptada a Material Design 3.",
+      "Gestión del ciclo de vida de la app y navegación con Navigation Compose.",
     ],
-    tech: ["Kotlin", "Jetpack Compose", "MVVM", "DataStore", "Android"],
-    scope: "personal",
-  },
-  {
-    title: "Desarrollador Full Stack (Portfolio)",
-    company: "Proyecto Personal",
-    period: "2025 - Actualidad",
-    points: [
-      "Diseño y desarrollo de mi portfolio personal con Next.js, TypeScript y React.",
-      "Integración de animaciones suaves con Framer Motion y estilos con TailwindCSS.",
-      "Estructura modular con componentes reutilizables y gestión de estado ligera."
+    tech: [
+      "Kotlin",
+      "Jetpack Compose",
+      "DataStore",
+      "MVVM",
+      "Material Design 3",
+      "Android Studio",
+      "Git",
+      "GitHub",
     ],
-    tech: ["Next.js", "React", "TypeScript", "Framer Motion", "TailwindCSS"],
     scope: "personal",
   },
   {
     title: "Tester Junior",
     company: "Viewnext",
-    period: "09/2022 - 02/2024",
+    period: "2022 - 2024",
     points: [
-      "Colaboración en pruebas de calidad de software con Selenium y Jira.",
-      "Automatización de pruebas a través de scripts en Java y JavaScript.",
-      "Documentación de resultados y coordinación con el equipo de QA."
+      "Pruebas funcionales y automatizadas de software empleando Selenium y Jira.",
+      "Diseño de casos de prueba y validación de flujos de usuario.",
+      "Automatización de tareas mediante scripts en Java y JavaScript.",
+      "Documentación de incidencias y comunicación con el equipo de QA y desarrollo.",
     ],
-    tech: ["Java", "JavaScript", "Selenium", "Jira"],
+    tech: ["Java", "JavaScript", "Selenium", "Jira", "Git"],
     scope: "work",
   },
   {
     title: "Estudiante en prácticas de desarrollo",
     company: "Viewnext",
-    period: "04/2022 - 09/2022",
+    period: "2021 - 2022",
     points: [
-      "Desarrollo de una aplicación empresarial en Java.",
-      "Diseño y mantenimiento de estructuras SQL.",
-      "Pruebas de API REST con Postman."
+      "Desarrollo de scripts en JavaScript para automatización interna.",
+      "Pruebas de llamadas API REST con Postman.",
+      "Aprendizaje de frameworks como React y Node.js en entornos empresariales.",
     ],
-    tech: ["Java", "SQL", "Postman"],
-    scope: "work",
-  },
-  {
-    title: "Estudiante en prácticas de desarrollo",
-    company: "Viewnext",
-    period: "05/2021 - 09/2021",
-    points: [
-      "Desarrollo de scripts en JavaScript.",
-      "Aprendizaje de frameworks como React y Node.js."
-    ],
-    tech: ["JavaScript", "React", "Node.js"],
+    tech: ["JavaScript", "Postman", "React", "Node.js"],
     scope: "work",
   },
 ];

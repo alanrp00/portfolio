@@ -4,6 +4,7 @@ export type Experience = {
   period: string;
   points: string[];
   tech?: string[];
+  scope?: "personal" | "work";
 };
 
 export const experiences: Experience[] = [
@@ -17,6 +18,7 @@ export const experiences: Experience[] = [
       "Diseño de animaciones fluidas y UI adaptada a Material Design 3."
     ],
     tech: ["Kotlin", "Jetpack Compose", "MVVM", "DataStore", "Android"],
+    scope: "personal",
   },
   {
     title: "Desarrollador Full Stack (Portfolio)",
@@ -28,17 +30,7 @@ export const experiences: Experience[] = [
       "Estructura modular con componentes reutilizables y gestión de estado ligera."
     ],
     tech: ["Next.js", "React", "TypeScript", "Framer Motion", "TailwindCSS"],
-  },
-  {
-    title: "Backend Developer (API Server)",
-    company: "Proyecto Personal",
-    period: "2024",
-    points: [
-      "Creación de una API REST modular en Node.js con Express y MongoDB.",
-      "Implementación de autenticación JWT y validación de datos.",
-      "Despliegue en entornos Docker y configuración con variables de entorno seguras."
-    ],
-    tech: ["Node.js", "Express", "MongoDB", "Docker"],
+    scope: "personal",
   },
   {
     title: "Tester Junior",
@@ -50,6 +42,7 @@ export const experiences: Experience[] = [
       "Documentación de resultados y coordinación con el equipo de QA."
     ],
     tech: ["Java", "JavaScript", "Selenium", "Jira"],
+    scope: "work",
   },
   {
     title: "Estudiante en prácticas de desarrollo",
@@ -61,6 +54,7 @@ export const experiences: Experience[] = [
       "Pruebas de API REST con Postman."
     ],
     tech: ["Java", "SQL", "Postman"],
+    scope: "work",
   },
   {
     title: "Estudiante en prácticas de desarrollo",
@@ -71,5 +65,6 @@ export const experiences: Experience[] = [
       "Aprendizaje de frameworks como React y Node.js."
     ],
     tech: ["JavaScript", "React", "Node.js"],
+    scope: "work",
   },
 ];

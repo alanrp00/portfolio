@@ -6,12 +6,9 @@ import { useEffect, useRef, useState } from "react";
 type Props = {
   open: boolean;
   onClose: () => void;
+  /** email de fallback para mailto si la API falla */
   toEmail?: string;
 };
-
-const API_BASE =
-  (process.env.NEXT_PUBLIC_API_BASE as string | undefined) ||
-  "http://localhost:4000/api";
 
 export default function ContactModal({ open, onClose, toEmail }: Props) {
   const dialogRef = useRef<HTMLDivElement | null>(null);
@@ -42,7 +39,6 @@ export default function ContactModal({ open, onClose, toEmail }: Props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
 
-  // No tocar success/loading para no cortar animaciones
   const resetForm = () => {
     setName("");
     setFrom("");
@@ -73,25 +69,30 @@ export default function ContactModal({ open, onClose, toEmail }: Props) {
 
     setLoading(true);
     try {
-      const res = await fetch(`${API_BASE}/contact`, {
+      // 👉 Llamamos a la API Route de Next.js (serverless en Vercel)
+      const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, from, message }),
+        // El backend espera "email" (no "from")
+        body: JSON.stringify({ name, email: from, message }),
       });
 
-      if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
-        throw new Error(data?.error || "No se pudo enviar el mensaje.");
+      const data = await res.json().catch(() => ({} as any));
+      if (!res.ok || data?.ok === false) {
+        const errorMsg =
+          data?.error ||
+          (data?.issues && "Datos inválidos. Revisa los campos.") ||
+          "No se pudo enviar el mensaje.";
+        throw new Error(errorMsg);
       }
 
       setSuccess(true);
       setLoading(false);
-
       setTimeout(() => {
         handleCancel();
       }, 1200);
     } catch (_error) {
-      // Fallback mailto
+      // Fallback mailto si la API falla (sin interrumpir UX)
       try {
         const subject = encodeURIComponent(`Contacto desde el portfolio — ${name}`);
         const body = encodeURIComponent(`De: ${name} <${from}>\n\n${message}`);
@@ -121,13 +122,11 @@ export default function ContactModal({ open, onClose, toEmail }: Props) {
           role="dialog"
           aria-labelledby="contact-title"
         >
-          {/* Backdrop ligado a tema: oscuro/clarito */}
+          {/* Backdrop ligado a tema */}
           <div
             className="absolute inset-0 backdrop-blur-[2px] transition-colors"
             style={{
-              background:
-                "color-mix(in oklab, var(--color-bg) 60%, black 40%)",
-              // En navegadores sin color-mix, cae en un overlay oscuro estándar
+              background: "color-mix(in oklab, var(--color-bg) 60%, black 40%)",
             }}
           />
           <div className="absolute inset-0 bg-black/30 md:bg-black/25 pointer-events-none" />
@@ -160,7 +159,7 @@ export default function ContactModal({ open, onClose, toEmail }: Props) {
 
             {/* Body */}
             <div className="px-5 py-4">
-              {/* Vista de Éxito */}
+              {/* Éxito */}
               <AnimatePresence mode="wait">
                 {sent && (
                   <motion.div
@@ -197,7 +196,7 @@ export default function ContactModal({ open, onClose, toEmail }: Props) {
                 )}
               </AnimatePresence>
 
-              {/* Formulario (oculto cuando success=true) */}
+              {/* Formulario */}
               {!sent && (
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -239,7 +238,6 @@ export default function ContactModal({ open, onClose, toEmail }: Props) {
 
                   {err && <p className="text-sm text-red-500">{err}</p>}
 
-                  {/* Actions (submit real) */}
                   <div className="flex items-center justify-end gap-2 pt-2">
                     <button
                       type="button"
@@ -288,7 +286,7 @@ export default function ContactModal({ open, onClose, toEmail }: Props) {
                 </form>
               )}
 
-              {/* Actions cuando success=true (botón → Enviado ✅) */}
+              {/* Botón inerte cuando success=true */}
               {sent && (
                 <div className="flex items-center justify-end pt-2">
                   <motion.button

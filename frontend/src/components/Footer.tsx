@@ -40,7 +40,7 @@ export default function Footer() {
   ];
 
   return (
-    <footer id="footer" className="mt-14 border-t border-[var(--color-border)] bg-[var(--color-bg)]">
+    <footer id="contacto" className="mt-14 border-t border-[var(--color-border)] bg-[var(--color-bg)]">
       <div className="mx-auto max-w-6xl px-4 py-8 flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
         {/* Socials (arriba y centradas en móvil; a la derecha en desktop) */}
         <div className="order-1 md:order-2 flex items-center justify-center gap-3 md:justify-end">

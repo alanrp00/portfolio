@@ -10,6 +10,8 @@ import {
 } from "@heroicons/react/24/outline";
 import { AnimatePresence, motion, type Variants } from "framer-motion";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
+
 
 type Props = { project: Project; onClose: () => void };
 
@@ -39,11 +41,12 @@ const slide = (direction: number): Variants => ({
 export default function ProjectModal({ project, onClose }: Props) {
   const accent = useAccentColor();
   const accentVar = { ["--accent" as any]: accent } as React.CSSProperties;
-  const repoUrl = project.github;;
+  const repoUrl = project.github;
   const GithubIcon = getIcon("FaGithub");
 
-  const imgs = useMemo(() => project.images ?? [], [project.images]);
+  const imgs = useMemo(() => (project.images ?? []).map((s) => (typeof s === "string" ? s.trim() : "")).filter(Boolean), [project.images]);
   const hasImages = imgs.length > 0;
+
   const [index, setIndex] = useState(0);
   const [direction, setDirection] = useState(0);
   const paginate = (dir: number) => {
@@ -53,6 +56,9 @@ export default function ProjectModal({ project, onClose }: Props) {
   };
   const DRAG_THRESHOLD = 60;
 
+  // Vista ampliada (lightbox)
+  const [preview, setPreview] = useState<string | null>(null);
+
   // scroll y bloqueo body
   const scrollRef = useRef<HTMLDivElement>(null);
   const [scrolled, setScrolled] = useState(false);
@@ -61,12 +67,58 @@ export default function ProjectModal({ project, onClose }: Props) {
     if (!el) return;
     setScrolled(el.scrollTop > 2);
   }, []);
+
   useEffect(() => {
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
-    return () => { document.body.style.overflow = prev; };
+    return () => {
+      document.body.style.overflow = prev;
+    };
   }, []);
-  const onKey = useCallback((e: KeyboardEvent) => { if (e.key === "Escape") onClose(); }, [onClose]);
+
+  // Esc: cierra preview si está abierto; si no, cierra el modal
+  const onKey = useCallback(
+    (e: KeyboardEvent) => {
+      // Navegación con teclado
+      if (e.key === "Escape") {
+        if (preview) setPreview(null);
+        else onClose();
+        return;
+      }
+
+      if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        if (preview) {
+          // cambiar dentro del preview
+          setPreview((curr) => {
+            const i = imgs.indexOf(curr ?? "");
+            const next = (i - 1 + imgs.length) % imgs.length;
+            return imgs[next];
+          });
+        } else {
+          // cambiar en el carrusel normal
+          paginate(-1);
+        }
+        return;
+      }
+
+      if (e.key === "ArrowRight") {
+        e.preventDefault();
+        if (preview) {
+          setPreview((curr) => {
+            const i = imgs.indexOf(curr ?? "");
+            const next = (i + 1) % imgs.length;
+            return imgs[next];
+          });
+        } else {
+          paginate(1);
+        }
+        return;
+      }
+    },
+    [preview, imgs, onClose, paginate]
+  );
+
   useEffect(() => {
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
@@ -74,6 +126,7 @@ export default function ProjectModal({ project, onClose }: Props) {
 
   return (
     <>
+      {/* Backdrop del modal */}
       <motion.div
         className="fixed inset-0 z-50 bg-black/60 backdrop-blur-[2px]"
         initial={{ opacity: 0 }}
@@ -83,6 +136,7 @@ export default function ProjectModal({ project, onClose }: Props) {
         onClick={onClose}
       />
 
+      {/* Contenedor modal */}
       <motion.div
         role="dialog"
         aria-modal="true"
@@ -138,7 +192,7 @@ export default function ProjectModal({ project, onClose }: Props) {
             animate="show"
             className="max-h-[90vh] overflow-y-auto px-5 md:px-6"
           >
-            {/* TÍTULO + BOTÓN GITHUB (alineado izq/der y con separación) */}
+            {/* TÍTULO + BOTÓN GITHUB */}
             <motion.div
               variants={itemVariants}
               className="pt-5 md:pt-6 mb-6 grid grid-cols-[1fr_auto] items-center gap-3 w-full"
@@ -164,26 +218,23 @@ export default function ProjectModal({ project, onClose }: Props) {
                     className="inline-flex items-center gap-2"
                   >
                     <GithubIcon className="w-5 h-5" />
-                    {/* 👇 texto oculto en móvil */}
                     <span className="hidden sm:inline text-sm font-medium">Ver en GitHub</span>
                   </motion.span>
                 </a>
-
               )}
             </motion.div>
 
-
-            {/* CARRUSEL */}
+            {/* CARRUSEL (GIFs + click para vista ampliada) */}
             <motion.div variants={itemVariants} className="relative rounded-2xl overflow-hidden">
               <div className="bg-[var(--color-card-bg)] grid place-items-center">
                 {hasImages ? (
                   <div className="relative w-full h-[280px] md:h-[360px]">
                     <AnimatePresence custom={direction} mode="popLayout">
                       <motion.img
-                        key={index}
+                        key={imgs[index]} // fuerza reinicio del GIF al cambiar
                         src={imgs[index]}
-                        alt={`${project.title} image ${index + 1}`}
-                        className="absolute inset-0 w-full h-full object-contain select-none"
+                        alt={`${project.title} imagen ${index + 1}`}
+                        className="absolute inset-0 w-full h-full object-contain select-none cursor-zoom-in"
                         variants={slide(direction)}
                         custom={direction}
                         initial="enter"
@@ -196,6 +247,7 @@ export default function ProjectModal({ project, onClose }: Props) {
                           if (offset > DRAG_THRESHOLD) paginate(-1);
                           else if (offset < -DRAG_THRESHOLD) paginate(1);
                         }}
+                        onClick={() => setPreview(imgs[index])}
                       />
                     </AnimatePresence>
                   </div>
@@ -257,7 +309,7 @@ export default function ProjectModal({ project, onClose }: Props) {
                     Descripción del proyecto
                   </h4>
                   <p className="text-[var(--color-text-secondary)] leading-relaxed">
-                    {project.details?.overview ?? project.description}
+                    {project.description_ext}
                   </p>
                 </section>
               </div>
@@ -288,6 +340,69 @@ export default function ProjectModal({ project, onClose }: Props) {
           </motion.div>
         </motion.div>
       </motion.div>
+
+      {preview &&
+        createPortal(
+          <AnimatePresence>
+            <motion.div
+              className="fixed inset-0 z-[999] bg-black/80 backdrop-blur-sm grid place-items-center cursor-zoom-out"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.25, ease: EASE }}
+              onClick={() => setPreview(null)}
+            >
+              {/* Imagen ampliada */}
+              <motion.img
+                src={preview}
+                alt="Vista ampliada"
+                className="max-w-[95vw] max-h-[90vh] object-contain rounded-xl shadow-2xl select-none"
+                initial={{ scale: 0.96, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.96, opacity: 0 }}
+                transition={{ type: "spring", stiffness: 260, damping: 28 }}
+              />
+
+              {/* Botón anterior */}
+              {imgs.length > 1 && (
+                <>
+                  <motion.button
+                    type="button"
+                    aria-label="Anterior"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setPreview(imgs[(imgs.indexOf(preview) - 1 + imgs.length) % imgs.length]);
+                    }}
+                    className="absolute left-6 top-1/2 -translate-y-1/2 flex items-center justify-center w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 border border-white/30 text-white shadow-lg backdrop-blur focus:outline-none"
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    <ChevronLeftIcon className="w-6 h-6" />
+                  </motion.button>
+
+                  {/* Botón siguiente */}
+                  <motion.button
+                    type="button"
+                    aria-label="Siguiente"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setPreview(imgs[(imgs.indexOf(preview) + 1) % imgs.length]);
+                    }}
+                    className="absolute right-6 top-1/2 -translate-y-1/2 flex items-center justify-center w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 border border-white/30 text-white shadow-lg backdrop-blur focus:outline-none"
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    <ChevronRightIcon className="w-6 h-6" />
+                  </motion.button>
+                </>
+              )}
+            </motion.div>
+          </AnimatePresence>,
+          document.body
+        )
+      }
+
+
     </>
   );
 }

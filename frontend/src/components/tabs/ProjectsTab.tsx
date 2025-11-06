@@ -4,17 +4,12 @@
 import ProjectModal from "@/components/modals/ProjectModal";
 import { projects, type Project } from "@/data/projects";
 import { useAccentColor } from "@/hooks/useAccentColor";
-import { getIcon } from "@/utils/iconMap";
+import { getIcon, iconMap } from "@/utils/iconMap";
 import { AnimatePresence, motion } from "framer-motion";
 import { useCallback, useState } from "react";
 
-// Mantengo exactamente tu estructura y estilos, solo añado animaciones suaves y modernas
-// sin forzar tipos de Variants para evitar errores TS con ciertas versiones de framer-motion.
-
 type TechItem = { name: string; icon?: string; color?: string };
 
-// Variantes muy simples y compatibles
-// Variantes compatibles sin 'ease' para evitar conflictos de tipos según la versión de framer-motion
 const gridVariants = {
   hidden: { opacity: 0 },
   show: {
@@ -23,7 +18,6 @@ const gridVariants = {
   },
 } as const;
 
-// Pop & Float — fade + scale-in al entrar; elevación suave en hover
 const cardVariants = {
   hidden: { opacity: 0, y: 6, scale: 0.98 },
   show: {
@@ -33,6 +27,90 @@ const cardVariants = {
     transition: { duration: 0.38 },
   },
 } as const;
+
+/** Mapeo explícito de “nombre visible” -> clave del icono del iconMap */
+const techToIconKey: Record<string, string> = {
+  // Frontend
+  "React": "FaReact",
+  "Next.js": "SiNextdotjs",
+  "TypeScript": "SiTypescript",
+  "JavaScript": "FaJsSquare",
+  "HTML5": "FaHtml5",
+  "CSS3": "FaCss3Alt",
+  "Bootstrap": "FaBootstrap",
+  "Sass": "FaSass",
+  "TailwindCSS": "SiTailwindcss",
+  "Framer Motion": "SiFramer",
+
+  // Backend / DB / Lenguajes
+  "Node.js": "FaNodeJs",
+  "Express": "SiExpress",
+  "Java": "FaJava",
+  "Python": "FaPython",
+  "MongoDB": "SiMongodb",
+  "SQLite": "SiSqlite",
+  "MySQL": "SiMysql",
+  "PHP": "SiPhp",
+  "C#": "SiCsharp",
+  "C++": "SiCplusplus",
+  "Django": "SiDjango",
+  "Spring": "SiSpring",
+  "Prisma": "SiPrisma",
+  "Supabase": "SiSupabase",
+  "SQL": "FaDatabase",
+  "DataStore": "FaDatabase",
+
+  // Android / Kotlin
+  "Android": "FaAndroid",
+  "Kotlin": "SiKotlin",
+  "Jetpack Compose": "SiJetpackcompose",
+  "MVVM": "FaCertificate",
+
+  // DevOps / Cloud
+  "Docker": "FaDocker",
+  "AWS": "FaAws",
+  "Google Cloud": "FaGoogle",
+  "Firebase": "SiFirebase",
+  "Git": "FaGitAlt",
+  "GitHub": "FaGithub",
+  "GitLab": "FaGitlab",
+  "Vercel": "SiVercel",
+  "Kubernetes": "SiKubernetes",
+
+  // Herramientas / Diseño
+  "Figma": "FaFigma",
+  "Postman": "SiPostman",
+  "VS Code": "SiVisualstudiocode",
+  "Notion": "SiNotion",
+
+  // SO
+  "Linux": "FaLinux",
+  "Windows": "FaWindows",
+  "macOS": "FaApple",
+};
+
+function resolveIconFromTech(t: TechItem) {
+  // 1) Si el objeto trae 'icon' explícito y existe en el mapa
+  if (t.icon && iconMap[t.icon]) return iconMap[t.icon];
+
+  // 2) Mapeo por nombre visible
+  const mapped = techToIconKey[t.name];
+  if (mapped && iconMap[mapped]) return iconMap[mapped];
+
+  // 3) Heurísticas Fa*/Si* (React -> FaReact / SiReact, Next.js -> SiNextdotjs, etc.)
+  const base = (t.icon ?? t.name)
+    .replace(/\s+|\./g, "")
+    .replace("CSS", "Css")
+    .replace("JS", "Js");
+  if (iconMap[`Fa${base}`]) return iconMap[`Fa${base}`];
+  if (iconMap[`Si${base}`]) return iconMap[`Si${base}`];
+
+  // 4) Último intento: clave directa igual al nombre
+  if (iconMap[t.name]) return iconMap[t.name];
+
+  // 5) Fallback controlado
+  return getIcon("____fallback____");
+}
 
 export default function ProjectsTab() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
@@ -53,7 +131,6 @@ export default function ProjectsTab() {
 
   return (
     <section id="projects" className="w-full flex flex-col items-center justify-center py-10">
-      {/* container con stagger y aparición al entrar en viewport */}
       <motion.div
         variants={gridVariants}
         initial="hidden"
@@ -62,7 +139,7 @@ export default function ProjectsTab() {
         className="max-w-6xl w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 px-4"
       >
         {projects.map((project) => {
-          const techs = project.tech ?? [];
+          const techs = (project.tech ?? []) as TechItem[];
           const visible = techs.slice(0, 4);
           const hidden = techs.slice(4);
           const hasMore = hidden.length > 0;
@@ -98,7 +175,6 @@ export default function ProjectsTab() {
                 "flex flex-col justify-between relative overflow-hidden",
               ].join(" ")}
             >
-
               <div className="flex flex-col gap-3">
                 <h3 className="text-xl font-semibold text-[var(--color-text-primary)]">
                   {project.title}
@@ -108,34 +184,25 @@ export default function ProjectsTab() {
                 </p>
               </div>
 
+              {/* Chips compactas como en ExperienceTab */}
               <motion.div
-                className="mt-5 flex flex-wrap gap-2"
-                // micro-stagger de chips cuando la tarjeta entra
+                className="mt-5 flex flex-wrap gap-1.5"
                 variants={{
                   hidden: {},
-                  show: {
-                    transition: { staggerChildren: 0.03, delayChildren: 0.05 },
-                  },
+                  show: { transition: { staggerChildren: 0.03, delayChildren: 0.05 } },
                 }}
               >
-                {visible.map((t: TechItem) => {
-                  const Icon = getIcon(t.icon ?? t.name);
+                {visible.map((t) => {
+                  const Icon = resolveIconFromTech(t);
                   return (
                     <motion.span
                       key={`${project.title}-${t.name}`}
-                      variants={{ hidden: { opacity: 0, y: 6 }, show: { opacity: 1, y: 0 } }}
-                      className={[
-                        "inline-flex items-center gap-1.5 text-sm px-2.5 py-1 rounded-xl",
-                        "border border-[var(--accent)] bg-[var(--color-card-bg)]",
-                        "transition-colors group-hover:border-[var(--accent)]",
-                      ].join(" ")}
+                      variants={{ hidden: { opacity: 0, y: 4 }, show: { opacity: 1, y: 0 } }}
+                      className="inline-flex items-center gap-1 text-xs px-2 py-[3px] rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-page)]/60"
                       title={t.name}
                     >
                       {Icon && (
-                        <Icon
-                          className="w-4 h-4"
-                          style={{ color: t.color ?? accent }}
-                        />
+                        <Icon className="w-3.5 h-3.5 opacity-80" style={{ color: t.color ?? accent }} />
                       )}
                       <span className="text-[var(--color-text-secondary)]">{t.name}</span>
                     </motion.span>
@@ -144,12 +211,8 @@ export default function ProjectsTab() {
 
                 {hasMore && (
                   <motion.span
-                    variants={{ hidden: { opacity: 0, y: 6 }, show: { opacity: 1, y: 0 } }}
-                    className={[
-                      "inline-flex items-center justify-center text-sm w-8 px-0 py-1 rounded-xl",
-                      "border border-[var(--color-border-soft)] bg-[var(--color-card-bg)]",
-                      "transition-colors group-hover:border-[var(--accent)]",
-                    ].join(" ")}
+                    variants={{ hidden: { opacity: 0, y: 4 }, show: { opacity: 1, y: 0 } }}
+                    className="inline-flex items-center justify-center text-xs w-6 h-[22px] px-0 rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-page)]/60"
                     title={hidden.map((t) => t.name).join(", ")}
                     aria-label={`Tecnologías adicionales: ${hidden.map((t) => t.name).join(", ")}`}
                   >
@@ -164,11 +227,7 @@ export default function ProjectsTab() {
 
       <AnimatePresence>
         {selectedProject && (
-          <ProjectModal
-            key={selectedProject.title}
-            project={selectedProject}
-            onClose={close}
-          />
+          <ProjectModal key={selectedProject.title} project={selectedProject} onClose={close} />
         )}
       </AnimatePresence>
     </section>

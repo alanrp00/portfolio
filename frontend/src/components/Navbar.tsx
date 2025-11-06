@@ -24,7 +24,7 @@ export default function Navbar() {
     { id: "experiencia", label: "Experiencia" },
     { id: "habilidades", label: "Habilidades" },
     { id: "educacion", label: "Educación" },
-    { id: "footer", label: "Contacto" },
+    { id: "contacto", label: "Contacto" },
   ];
 
   // Detectar scroll para blur y sección activa
@@ -77,7 +77,7 @@ export default function Navbar() {
           className="text-lg font-semibold text-[var(--color-text-primary)] hover:text-[var(--color-accent)] transition-colors"
           aria-label="Ir al inicio"
         >
-          Alán<span className="text-[var(--color-accent)]">.</span>
+          alanrivas<span className="text-[var(--color-accent)]">.dev</span>
         </a>
 
         {/* Links Desktop */}

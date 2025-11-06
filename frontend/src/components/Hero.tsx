@@ -18,10 +18,10 @@ export default function Hero() {
   );
 
   const accent = useAccentColor();
-  // TODO: Actualizar link al CV
+
   return (
     <section
-      id="home"
+      id="inicio"
       className="relative flex flex-col items-center justify-center min-h-screen text-center container"
     >
       {/* 🧑‍💻 Avatar con glow y sombra flotante 3D */}
@@ -117,8 +117,8 @@ export default function Hero() {
         className="flex flex-wrap justify-center gap-4"
       >
         <a
-          href="/cv.pdf"
-          target="_blank"
+          href="/alan_rivas_perez_cv.pdf"
+          download="Alan_Rivas_Perez_CV.pdf"
           rel="noopener noreferrer"
           className="btn btn-secondary"
         >

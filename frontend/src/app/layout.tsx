@@ -1,3 +1,4 @@
+import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata } from "next";
 import { ThemeProvider } from "next-themes";
@@ -26,6 +27,8 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+          {/* Integraciones de Vercel */}
+          <Analytics />
           <SpeedInsights />
           {children}
         </ThemeProvider>

@@ -29,11 +29,11 @@ export const skills: Skill[] = [
   { name: "Postman", icon: "SiPostman", category: "DevOps & Tools", projects: [] },
 
   // --- TESTING ---
-  { name: "Selenium", icon: "SiSelenium", category: "DevOps & Tools", projects: [] },
+  // { name: "Selenium", icon: "SiSelenium", category: "DevOps & Tools", projects: [] },
   { name: "Jira", icon: "SiJira", category: "DevOps & Tools", projects: [] },
 
   // --- MOBILE / ANDROID ---
-  { name: "Kotlin", icon: "SiKotlin", category: "Backend", projects: ["palabro"] },
-  { name: "Jetpack Compose", icon: "SiJetpackcompose", category: "Frontend", projects: ["palabro"] },
-  { name: "Navigation Compose", icon: "FaAndroid", category: "Backend", projects: ["palabro"] },
+  { name: "Kotlin", icon: "SiKotlin", category: "Mobile", projects: ["palabro"] },
+  { name: "Jetpack Compose", icon: "SiJetpackcompose", category: "Mobile", projects: ["palabro"] },
+  { name: "Navigation Compose", icon: "FaAndroid", category: "Mobile", projects: ["palabro"] },
 ];

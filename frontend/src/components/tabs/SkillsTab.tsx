@@ -44,7 +44,7 @@ type FilterValue = (typeof FILTERS)[number]["value"];
 
 /** Categorías dinámicas a partir del dato (incluye Mobile) */
 const CATEGORIES = Array.from(new Set(DATA.map((s) => s.category))) as Array<
-  "Frontend" | "Backend" | "DevOps & Tools"
+  "Frontend" | "Backend" | "DevOps & Tools" | "Mobile"
 >;
 
 export default function SkillsTab() {
